@@ -1479,7 +1479,7 @@
 
       // Success: clear form, show success message
       success.classList.add('show');
-      success.innerHTML = '<strong>Thank you.</strong> Your inquiry is in. Check your inbox for a confirmation &mdash; we\'ll be in touch within one business day.';
+      success.innerHTML = '<strong>Thank you.</strong> Your inquiry is in. Check your inbox for a confirmation. We\'ll be in touch within one business day.';
       form.querySelectorAll('input, textarea').forEach(el => { el.value = ''; });
       form.querySelectorAll('.chip').forEach(el => el.setAttribute('aria-pressed', 'false'));
       btnLabel.textContent = originalLabel;
