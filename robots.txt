@@ -1,0 +1,6 @@
+# robots.txt for crest88.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://crest88.com/sitemap.xml
