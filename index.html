@@ -1443,27 +1443,63 @@
     });
   });
 
-  // Fake submit
-  function submitForm(e) {
+  // Real submit — POSTs to Cloudflare Worker which sends two emails via Resend
+  const FORM_ENDPOINT = 'https://crest88-form.phillip-8ea.workers.dev';
+
+  async function submitForm(e) {
     e.preventDefault();
     const form = e.target;
     const success = document.getElementById('form-success');
     const btn = form.querySelector('.form-submit');
+    const btnLabel = btn.querySelector('span');
+    const originalLabel = btnLabel.textContent;
+
     btn.disabled = true;
-    btn.querySelector('span').textContent = 'Sending...';
-    setTimeout(() => {
-      success.classList.add('show');
-      form.querySelectorAll('input, textarea, .chip').forEach(el => {
-        if (el.tagName === 'BUTTON') {
-          el.setAttribute('aria-pressed', 'false');
-        } else {
-          el.value = '';
-        }
+    btnLabel.textContent = 'Sending...';
+
+    const payload = {
+      name: document.getElementById('f-name').value.trim(),
+      email: document.getElementById('f-email').value.trim(),
+      company: document.getElementById('f-company').value.trim(),
+      website: document.getElementById('f-site').value.trim(),
+      size: document.getElementById('f-size').value.trim(),
+      notes: document.getElementById('f-notes').value.trim(),
+    };
+
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `Server returned ${res.status}`);
+      }
+
+      // Success: clear form, show success message
+      success.classList.add('show');
+      success.innerHTML = '<strong>Thank you.</strong> Your inquiry is in. Check your inbox for a confirmation &mdash; we\'ll be in touch within one business day.';
+      form.querySelectorAll('input, textarea').forEach(el => { el.value = ''; });
+      form.querySelectorAll('.chip').forEach(el => el.setAttribute('aria-pressed', 'false'));
+      btnLabel.textContent = originalLabel;
       btn.disabled = false;
-      btn.querySelector('span').textContent = 'Send inquiry';
-      setTimeout(() => success.classList.remove('show'), 6000);
-    }, 800);
+      setTimeout(() => success.classList.remove('show'), 8000);
+    } catch (err) {
+      success.classList.add('show');
+      success.style.background = 'rgba(220,80,80,0.12)';
+      success.style.borderColor = '#dc5050';
+      success.innerHTML = '<strong>Something went wrong.</strong> Please try again, or email <a href="mailto:phillip@crest88.com" style="color:inherit;text-decoration:underline;">phillip@crest88.com</a> directly.';
+      btnLabel.textContent = originalLabel;
+      btn.disabled = false;
+      setTimeout(() => {
+        success.classList.remove('show');
+        success.style.background = '';
+        success.style.borderColor = '';
+      }, 10000);
+      console.error('Form submission failed:', err);
+    }
+
     return false;
   }
 </script>
