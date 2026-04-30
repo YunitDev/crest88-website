@@ -86,17 +86,10 @@
 
   /* ---------- Hero ---------- */
   .hero { padding: 100px 0 90px; }
-  .hero .container { max-width: 1280px; }
   .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-    column-gap: 72px;
-    row-gap: 56px;
-    align-items: start;
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 72px; align-items: center;
   }
-  .hero-headline { grid-column: 1 / -1; }
-  .hero-content { grid-column: 1; align-self: center; }
-  .hero-grid > .stat-card { grid-column: 2; align-self: center; }
   .hero .kicker {
     display: inline-flex; align-items: center; gap: 10px;
     font-family: var(--sans); font-size: 14px; font-weight: 500;
@@ -110,9 +103,9 @@
   }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
   .hero h1 {
-    font-family: var(--serif); font-size: clamp(44px, 5.4vw, 72px);
+    font-family: var(--serif); font-size: clamp(48px, 6.6vw, 84px);
     line-height: 1.05; letter-spacing: -0.015em; color: var(--ink);
-    max-width: none;
+    max-width: 22ch;
     text-wrap: balance;
   }
   .hero .sub {
@@ -751,9 +744,6 @@
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
     .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-    .hero-grid > .hero-headline,
-    .hero-grid > .hero-content,
-    .hero-grid > .stat-card { grid-column: 1; }
     .process .grid { grid-template-columns: 1fr 1fr; }
     .contact-grid { grid-template-columns: 1fr; gap: 48px; }
   }
@@ -807,10 +797,8 @@
   <section class="hero">
     <div class="container">
       <div class="hero-grid">
-        <div class="hero-headline">
+        <div>
           <h1>Whether you built it or bought it.<br><em>We help you scale it.</em></h1>
-        </div>
-        <div class="hero-content">
           <p class="sub">
             Headcount has always been the scaling tax. We embed senior operators for thirty days
             and ship the AI tools that retire it.
