@@ -739,14 +739,33 @@
 
   /* ---------- Footer ---------- */
   footer {
-    padding: 40px 0; border-top: 1px solid var(--border); color: var(--ink-muted); font-size: 15px;
+    padding: 56px 0 32px; border-top: 1px solid var(--border);
+    color: var(--ink-muted); font-size: 15px;
   }
   footer .inner {
-    max-width: 1100px; margin: 0 auto; padding: 0 40px;
-    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    max-width: 1280px; margin: 0 auto; padding: 0 40px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
   }
   footer .brand .name { font-size: 22px; }
   footer .brand svg { width: 22px; height: 22px; }
+  .footer-brand { display: flex; flex-direction: column; gap: 10px; }
+  .footer-tagline { font-size: 14px; color: var(--ink-muted); margin: 0; }
+  .footer-contact a {
+    color: var(--ink-soft); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .footer-contact a:hover { color: var(--gold-bright); border-color: var(--gold-bright); }
+  .footer-meta {
+    max-width: 1280px; margin: 32px auto 0; padding: 24px 40px 0;
+    border-top: 1px solid var(--border-soft);
+    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    font-size: 13px; color: var(--ink-muted);
+  }
+  .footer-meta a { color: var(--ink-muted); text-decoration: none; transition: color .2s ease; }
+  .footer-meta a:hover { color: var(--ink); }
+  .footer-meta .sep { opacity: 0.4; user-select: none; }
 
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
@@ -1230,11 +1249,25 @@
 
 <footer>
   <div class="inner">
-    <a href="#" class="brand">
-      <svg aria-hidden="true"><use href="#crest-star"></use></svg>
-      <span class="name">Crest<em>88</em></span>
-    </a>
-    <div>© 2026 Crest88 · Humans implementing AI for growing businesses</div>
+    <div class="footer-brand">
+      <a href="#" class="brand">
+        <svg aria-hidden="true"><use href="#crest-star"></use></svg>
+        <span class="name">Crest<em>88</em></span>
+      </a>
+      <p class="footer-tagline">Senior operators. AI-powered tools.</p>
+    </div>
+    <div class="footer-contact">
+      <a href="mailto:hello@crest88.com">hello@crest88.com</a>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>&copy; 2026 Crest88 LLC</span>
+    <span class="sep">·</span>
+    <a href="privacy.html">Privacy</a>
+    <span class="sep">·</span>
+    <a href="terms.html">Terms</a>
+    <span class="sep">·</span>
+    <a href="https://crest88.com">crest88.com</a>
   </div>
 </footer>
 
