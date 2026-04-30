@@ -103,7 +103,6 @@
     row-gap: 56px;
     align-items: start;
   }
-  .hero-headline { grid-column: 1 / -1; }
   .hero-content { grid-column: 1; align-self: center; }
   .hero-grid > .stat-card { grid-column: 2; align-self: center; }
   .hero .kicker {
@@ -779,7 +778,6 @@
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
     .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-    .hero-grid > .hero-headline,
     .hero-grid > .hero-content,
     .hero-grid > .stat-card { grid-column: 1; }
     .process .grid { grid-template-columns: 1fr 1fr; }
@@ -791,7 +789,7 @@
     nav.top .inner { padding: 0 24px; }
     section { padding: 64px 0; }
     .hero { padding: 64px 0; }
-    .hero h1 { font-size: 48px; }
+    .hero h1 { font-size: clamp(28px, 8.5vw, 42px); }
     .hero .sub { font-size: 19px; }
     .process .grid { grid-template-columns: 1fr; }
     .contact-form { grid-template-columns: 1fr; padding: 24px; }
@@ -835,10 +833,8 @@
   <section class="hero">
     <div class="container">
       <div class="hero-grid">
-        <div class="hero-headline">
-          <h1>Scale your business.<br><em>Not your costs.</em></h1>
-        </div>
         <div class="hero-content">
+          <h1>Scale your business.<br><em>Not your costs.</em></h1>
           <p class="sub">
             Senior operators inside your business, building the AI-powered tools that
             scale you without scaling your team.
