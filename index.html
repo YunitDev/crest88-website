@@ -797,6 +797,25 @@
     .form-submit { justify-content: center; }
     footer .inner { flex-direction: column; text-align: center; padding: 0 24px; }
   }
+
+  /* Platform section (OAuth branding) */
+  .platform .container { max-width: 900px; }
+  .platform p { color: var(--ink-soft); margin-bottom: 20px; max-width: 760px; }
+  .platform p a {
+    color: var(--gold-bright); text-decoration: underline;
+    text-underline-offset: 3px; text-decoration-thickness: 1px;
+  }
+  .platform p a:hover { color: var(--ink); }
+  .platform .fine { font-size: 15px; color: var(--ink-muted); }
+  .plat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 40px 0 36px; }
+  .plat-card {
+    border: 1px solid var(--border-soft); background: var(--surface);
+    border-radius: 14px; padding: 22px 20px;
+  }
+  .plat-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+  .plat-card p { font-size: 14px; color: var(--ink-muted); margin: 0; line-height: 1.55; }
+  @media (max-width: 900px) { .plat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .plat-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -1136,6 +1155,39 @@
   </section>
 
   <!-- TESTIMONIAL -->
+
+  <!-- PLATFORM -->
+  <section class="platform" id="platform">
+    <div class="container">
+      <span class="label">The platform</span>
+      <h2>The engine behind it: the Crest88 <em>app</em>.</h2>
+      <p class="lead">
+        Everything we ship runs on Crest88 — our AI agent application that works inside the
+        systems your business already uses.
+      </p>
+      <p>
+        Crest88 triages your inbox and drafts replies for your approval, keeps jobs, tasks, and
+        records organized, takes notes and action items in your meetings, and answers questions
+        from your company's own knowledge. Every outbound action — like sending an email — is
+        reviewed and approved by a human before it happens.
+      </p>
+      <div class="plat-grid">
+        <div class="plat-card reveal"><h3>Email, handled</h3><p>Your inbox triaged and replies drafted — you approve before anything sends.</p></div>
+        <div class="plat-card reveal" data-delay="1"><h3>Jobs &amp; records</h3><p>Tasks, customers, and job files kept organized and up to date, automatically.</p></div>
+        <div class="plat-card reveal" data-delay="2"><h3>Meeting notes</h3><p>Agendas, transcripts, and action items captured from every meeting.</p></div>
+        <div class="plat-card reveal" data-delay="3"><h3>Ask your business</h3><p>Answers drawn from your company's own documents and data.</p></div>
+      </div>
+      <p class="fine">
+        When you connect a Google account, Crest88 accesses Gmail and Google Calendar — with your
+        permission — to read and organize mail, prepare drafts for your approval, and manage
+        events. You can disconnect at any time. Crest88's use and transfer of information received
+        from Google APIs adheres to the
+        <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>,
+        including the Limited Use requirements. See our <a href="privacy.html">Privacy Policy</a>.
+      </p>
+    </div>
+  </section>
+
   <section class="testimonial" aria-label="Client testimonial">
     <svg class="starfield" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <!-- Static dim stars -->
