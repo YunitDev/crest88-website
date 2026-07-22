@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Privacy · Crest88</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Crest88 privacy policy.">
+<meta name="description" content="Crest88 privacy policy — how we handle data on crest88.com and the Crest88 platform.">
 <meta name="robots" content="noindex">
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -87,10 +87,14 @@
     color: var(--ink); margin-top: 48px; margin-bottom: 16px;
     letter-spacing: -0.01em;
   }
-  .legal-content ul {
+  .legal-content h3 {
+    font-size: 16px; font-weight: 600; color: var(--ink);
+    margin-top: 30px; margin-bottom: 10px;
+  }
+  .legal-content ul, .legal-content ol {
     margin: 0 0 20px 24px;
   }
-  .legal-content ul li { margin-bottom: 8px; }
+  .legal-content ul li, .legal-content ol li { margin-bottom: 8px; }
   .legal-content a {
     color: var(--gold-bright);
     text-decoration: underline; text-underline-offset: 3px;
@@ -99,6 +103,25 @@
   }
   .legal-content a:hover { color: var(--ink); }
   .legal-content strong { color: var(--ink); }
+  .summary {
+    background: var(--surface); border: 1px solid var(--border-soft);
+    border-radius: 12px; padding: 26px 30px; margin: 0 0 8px;
+  }
+  .summary ul { margin-bottom: 0; }
+  .table-wrap { overflow-x: auto; margin: 0 0 24px; }
+  .legal-content table {
+    width: 100%; border-collapse: collapse;
+    font-size: 15px; line-height: 1.55;
+  }
+  .legal-content th {
+    text-align: left; font-weight: 600; color: var(--ink);
+    padding: 10px 14px 10px 0; border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  .legal-content td {
+    padding: 12px 14px 12px 0; border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+  }
 
   /* Footer (mirrors index.html) */
   footer {
@@ -135,6 +158,7 @@
     nav.top .inner { padding: 0 24px; }
     .legal { padding: 56px 0 64px; }
     .legal h1 { font-size: 36px; }
+    .summary { padding: 20px 22px; }
     footer .inner { padding: 0 24px; }
     .footer-meta { padding: 24px 24px 0; }
   }
@@ -171,42 +195,177 @@
   <div class="container">
     <span class="label">Legal</span>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: April 30, 2026</p>
+    <p class="updated">Last updated: July 22, 2026 &middot; Effective: July 22, 2026</p>
 
     <div class="legal-content">
-      <p>Crest88 LLC ("we", "our", "Crest88") respects your privacy. This policy explains what we collect when you visit crest88.com or contact us, how we use it, and your rights.</p>
+      <p>This Privacy Policy explains how <strong>Crest88 LLC</strong> ("Crest88," "we," "us") collects, uses, and protects information across our website — crest88.com — and the Crest88 platform: our AI agent platform, sometimes called "Central Brain," available to clients at brain.crest88.com and related subdomains (the "Platform").</p>
 
-      <h2>What we collect</h2>
-      <p>When you submit our contact form, we collect:</p>
+      <p>The Platform is a business product. We provide it to companies ("Clients") under a signed engagement letter or services agreement, and the people who use it ("Users") do so on behalf of a Client. Where this Policy and a Client's signed agreement differ, the signed agreement controls for that Client's data.</p>
+
+      <p>If you have any questions, contact us at <a href="mailto:hello@crest88.com">hello@crest88.com</a>.</p>
+
+      <h2>1. The short version</h2>
+      <div class="summary">
+        <ul>
+          <li>We collect the minimum account information needed to sign you in: your <strong>email address</strong>, your role, and login timestamps. Names, photos, and passwords are handled by our identity provider, not stored in our application database.</li>
+          <li>The Platform works with your business content — email, calendars, tasks, documents, meetings, chat — <strong>only after your organization explicitly connects those systems</strong>. You choose what to connect, and you can disconnect at any time.</li>
+          <li>We use third-party AI providers (currently <strong>OpenAI</strong> and <strong>Anthropic</strong>) to power the Platform's assistant, drafting, and voice features. We do not permit these providers to use your data to train their models.</li>
+          <li><strong>We do not sell your data. We do not run advertising.</strong> We use no advertising or marketing cookies, and no third-party product-analytics trackers.</li>
+          <li>Your organization owns its data and can export it or request full deletion at any time. Crest88 owns the underlying engine — the prompts, agent architectures, and software that make the Platform work.</li>
+        </ul>
+      </div>
+
+      <h2>2. Information we collect</h2>
+
+      <h3>On the website (crest88.com)</h3>
+      <p>If you submit our contact form, we collect what you enter: your name, email address, and any optional details (company, website, revenue range, message). The website itself sets no analytics or advertising cookies.</p>
+
+      <h3>On the Platform — account information</h3>
+      <p>When your organization invites you to the Platform, we create an account holding:</p>
       <ul>
-        <li>Your name and email address</li>
-        <li>Your company name (optional)</li>
-        <li>Your company website (optional)</li>
-        <li>A revenue range you select (optional)</li>
-        <li>Your free-text response to "what would make this engagement a win"</li>
+        <li>Your <strong>email address</strong> and your <strong>role</strong> within your organization's workspace (owner, admin, or member)</li>
+        <li>Sign-in and activity timestamps (last login, last seen)</li>
       </ul>
-      <p>We do not use cookies or analytics on this site.</p>
+      <p>Sign-in itself is handled by our identity service using industry-standard OpenID Connect. If your organization signs in with Microsoft, Microsoft acts as your identity provider under its own privacy policy. We do not store your password.</p>
 
-      <h2>How we use it</h2>
-      <p>Solely to respond to your inquiry, evaluate whether our services are a fit for your business, and maintain a record of past communications.</p>
+      <h3>On the Platform — content you and your organization provide</h3>
+      <p>The Platform exists to work with your business information. Depending on what your organization sets up, this can include:</p>
+      <ul>
+        <li><strong>Documents and files</strong> you upload or connect, and the searchable indexes we build from them</li>
+        <li><strong>Tasks, projects, and records</strong> (for example jobs, customers, contacts, and other business entities), including notes and change history</li>
+        <li><strong>Meetings</strong> — agendas, attendees, action items, and written transcripts</li>
+        <li><strong>Chat and assistant conversations</strong> with the Platform, in text or by voice</li>
+        <li><strong>Knowledge</strong> the Platform is configured with — facts, policies, and workflows specific to your business</li>
+        <li><strong>Learned preferences</strong> — for example, how you like emails drafted, so the assistant improves for you over time</li>
+      </ul>
 
-      <h2>Who we share it with</h2>
-      <p>We do not sell, rent, or trade your information. To operate the site, we may use third-party service providers for hosting, email delivery, and form handling. These providers receive only the minimum information necessary to deliver their service and are bound by industry-standard privacy commitments.</p>
+      <h3>On the Platform — connected services</h3>
+      <p>Your organization can authorize the Platform to access outside systems. <strong>Nothing is connected unless an authorized person in your organization approves it</strong>, and each connection can be revoked. Currently supported connections:</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Connected service</th><th style="white-space:normal">What the Platform accesses</th></tr>
+          <tr><td><strong>Gmail / Google Workspace</strong></td><td>Reads mail and calendar events; sends email on your behalf when you approve it</td></tr>
+          <tr><td><strong>Microsoft 365 / Outlook</strong></td><td>Reads mail; sends email on your behalf when you approve it</td></tr>
+          <tr><td><strong>Slack</strong></td><td>Reads channels and messages; can post messages</td></tr>
+          <tr><td><strong>Asana</strong></td><td>Reads projects, tasks, and attachments; can sync updates back</td></tr>
+          <tr><td><strong>QuickBooks / Xero</strong></td><td>Reads customers, invoices, and attachments</td></tr>
+        </table>
+      </div>
+      <p>Access tokens for these connections are stored encrypted in a dedicated secrets vault (AWS Secrets Manager), never in plain form in our application database.</p>
 
-      <h2>How long we keep it</h2>
-      <p>For as long as needed to maintain a working relationship, or one year after our last interaction, whichever is longer. You may request deletion at any time.</p>
+      <h3>On the Platform — collected automatically</h3>
+      <ul>
+        <li><strong>Audit logs</strong> — a record of significant actions taken in your workspace (who did what, when), kept for security and accountability</li>
+        <li><strong>Usage metering</strong> — counts of AI usage (for example, token counts) for operations and billing</li>
+        <li><strong>Error and diagnostic data</strong> — we may use error-monitoring software (Sentry) to capture crash reports so we can fix problems</li>
+        <li><strong>Voice telemetry</strong> — for voice features we log technical events (connection status, latency, errors). <strong>We do not store raw audio recordings</strong>, and voice telemetry excludes message content and personal details. What you say through voice features is stored only as written transcript, in your workspace, where the feature is designed to keep one (for example meeting transcripts)</li>
+      </ul>
 
-      <h2>Your rights</h2>
-      <p>You may request access to, correction of, or deletion of any information we hold about you, and you may withdraw consent at any time. Email <a href="mailto:hello@crest88.com">hello@crest88.com</a>.</p>
+      <h2>3. How we use information</h2>
+      <p>We use information to:</p>
+      <ul>
+        <li>Provide, operate, and secure the Platform for your organization</li>
+        <li>Power AI features: triaging and drafting email, answering questions, running meetings, extracting and organizing business records, and voice interaction</li>
+        <li>Take actions you or your organization approve — for example sending an email you have reviewed</li>
+        <li>Maintain audit trails, prevent abuse, and meet legal obligations</li>
+        <li>Improve the Platform for your organization (for example, learning your drafting preferences)</li>
+        <li>Respond when you contact us</li>
+      </ul>
+      <p><strong>We do not sell personal information, and we do not use your information for third-party advertising.</strong> We do not use your organization's content to build products for other customers.</p>
 
-      <h2>Children</h2>
-      <p>Crest88 is a B2B advisory; we do not knowingly collect information from anyone under 16.</p>
+      <h2>4. AI processing — what leaves our systems</h2>
+      <p>To provide AI features, relevant content is sent to our AI providers for processing:</p>
+      <ul>
+        <li><strong>OpenAI</strong> — text generation, embeddings (the math that powers search), web search within the assistant, and real-time voice (your speech is streamed to OpenAI to be understood and transcribed)</li>
+        <li><strong>Anthropic</strong> — text generation</li>
+      </ul>
+      <p>Depending on the feature in use, the content processed can include chat messages, email text, document excerpts, meeting speech, and the on-screen values needed for voice control to work. We use these providers through their business APIs under terms that <strong>do not permit them to use your data to train their models</strong>.</p>
+      <p>If your organization uses the meeting-notes feature, a notetaker bot from <strong>Recall.ai</strong> joins the meeting you invite it to and delivers the transcript to your workspace. Meeting audio is processed by Recall.ai for that purpose.</p>
 
-      <h2>Changes</h2>
-      <p>We may update this policy. Material changes will be reflected in the "last updated" date above.</p>
+      <h2>5. Who we share information with</h2>
+      <p>We share information only with the service providers that make the Platform run ("subprocessors"), with connected services you have authorized, and where the law requires it. We never sell it. Current subprocessors:</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Provider</th><th style="white-space:normal">Purpose</th><th>Location</th></tr>
+          <tr><td>Amazon Web Services</td><td>Hosting, database, file storage, encrypted secrets vault</td><td>United States</td></tr>
+          <tr><td>OpenAI</td><td>AI text, embeddings, assistant web search, real-time voice</td><td>United States</td></tr>
+          <tr><td>Anthropic</td><td>AI text</td><td>United States</td></tr>
+          <tr><td>Recall.ai</td><td>Meeting notetaker bot and transcription (only if used)</td><td>United States</td></tr>
+          <tr><td>Resend</td><td>System email (invitations, notifications)</td><td>United States</td></tr>
+          <tr><td>Sentry</td><td>Error monitoring</td><td>United States</td></tr>
+          <tr><td>Google Maps</td><td>Converting business addresses to map locations (only if the map feature is used)</td><td>United States</td></tr>
+        </table>
+      </div>
+      <p>We will update this list as our providers change. We may also disclose information if required by law, or in connection with a corporate transaction such as a merger — in which case this Policy continues to apply to the transferred data.</p>
 
-      <h2>Contact</h2>
-      <p>For privacy questions, email <a href="mailto:hello@crest88.com">hello@crest88.com</a>.</p>
+      <h2>6. Who at Crest88 can see your data</h2>
+      <p>Crest88 operators (our team) can access a Client workspace to provide the service — for setup, support, and operating agents on your behalf, as agreed in your engagement. This access is deliberately constrained:</p>
+      <ul>
+        <li>Operator access runs in <strong>time-boxed sessions</strong> (30 minutes) that are individually recorded</li>
+        <li>Sensitive actions require an <strong>explicit extra confirmation</strong>, recorded per action; anything sent outside your organization (like approving an outbound email) is confirmed per recipient</li>
+        <li>The most destructive operations (removing users, revoking connections, deleting a workspace) are <strong>blocked entirely</strong> in operator-access mode</li>
+        <li>All operator access is <strong>audit-logged</strong></li>
+      </ul>
+      <p>Server access is equally restricted: there is no open SSH port; administrative access goes through AWS's identity-controlled session manager and is logged in AWS CloudTrail.</p>
+
+      <h2>7. Data ownership</h2>
+      <p>Consistent with our client agreements:</p>
+      <ul>
+        <li><strong>Your organization owns its data</strong> — the raw business content it brings, and the configured knowledge built from it (facts, records, transcripts, indexes, workflows configured for your business). This is exportable by your organization.</li>
+        <li><strong>Crest88 owns the engine</strong> — the software, prompts, agent architectures, evaluation systems, and operational telemetry that make the Platform work. Engine internals are never included in exports.</li>
+      </ul>
+
+      <h2>8. Security</h2>
+      <ul>
+        <li><strong>Encryption in transit</strong> — all traffic to the Platform uses TLS (HTTPS)</li>
+        <li><strong>Encryption of secrets at rest</strong> — connection credentials and sensitive secrets are envelope-encrypted with AES-256-GCM using per-tenant keys; OAuth tokens live in AWS Secrets Manager, not the application database</li>
+        <li><strong>Tenant isolation</strong> — every Client workspace is isolated at the database layer with enforced row-level security, plus a second application-level check on every query</li>
+        <li><strong>Least-access operations</strong> — no open SSH; identity-gated, fully audited administrative access</li>
+        <li><strong>Audit trails</strong> — significant actions are logged and retained</li>
+      </ul>
+      <p>No system is perfectly secure, and we cannot guarantee absolute security — but security is designed into the Platform's architecture, not bolted on.</p>
+
+      <h2>9. How long we keep information</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th style="white-space:normal">Data</th><th style="white-space:normal">Retention</th></tr>
+          <tr><td>Your workspace content (documents, records, transcripts, conversations)</td><td>For the life of your organization's engagement, until deleted by your organization or offboarded</td></tr>
+          <tr><td>Audit logs</td><td>90 days on a rolling basis</td></tr>
+          <tr><td>Email triage log (a short technical record of how each email was routed)</td><td>30 days on a rolling basis</td></tr>
+          <tr><td>Export bundles you generate</td><td>Download links expire after 24 hours</td></tr>
+          <tr><td>Usage/metering records</td><td>Retained as business records (billing, tax)</td></tr>
+          <tr><td>Website contact-form submissions</td><td>As long as needed to respond, up to one year after our last interaction</td></tr>
+        </table>
+      </div>
+
+      <h3>Offboarding and deletion</h3>
+      <p>When an engagement ends (or on request by an authorized owner), we run a formal offboarding process:</p>
+      <ol>
+        <li><strong>Export first</strong> — your organization can take a complete export of its data</li>
+        <li><strong>Deletion</strong> — connected-account tokens are revoked at the provider (Google/Microsoft) and invalidated; documents, extracted knowledge, and search indexes are deleted; the workspace's encryption keys are destroyed, rendering any remaining encrypted material permanently unreadable</li>
+        <li><strong>Receipt</strong> — we produce a deletion receipt recording what was deleted, in what quantities, by whom, and when</li>
+      </ol>
+      <p>We retain only what security and law sensibly require after offboarding: audit logs (on their normal schedule), usage records (billing/tax), and the deletion receipt itself.</p>
+
+      <h2>10. Your rights and choices</h2>
+      <ul>
+        <li><strong>Access and export</strong> — your organization's authorized users can export its data at any time from within the Platform</li>
+        <li><strong>Disconnect</strong> — any connected service can be disconnected by an authorized user</li>
+        <li><strong>Correction and deletion</strong> — most content can be edited or deleted directly in the Platform; for anything else, contact us</li>
+        <li><strong>Account questions</strong> — because Platform accounts belong to a Client workspace, we may route requests about workspace data through your organization's administrator</li>
+      </ul>
+      <p>Depending on where you live, you may have additional legal rights over your personal information (such as rights of access, correction, deletion, or portability). To exercise any right, email <a href="mailto:hello@crest88.com">hello@crest88.com</a> — we will respond to verifiable requests as required by applicable law, and we do not discriminate against you for exercising them.</p>
+      <p>The Platform is a business tool and is not directed to children under 16; we do not knowingly collect information from them.</p>
+
+      <h2>11. Where data is processed</h2>
+      <p>We are a U.S. company and process data in the United States. If you access the Platform from outside the U.S., you understand your information will be transferred to and processed in the U.S.</p>
+
+      <h2>12. Changes to this Policy</h2>
+      <p>If we make material changes, we will update the date above and notify Platform users through the product or by email. Continued use after changes take effect means the updated Policy applies.</p>
+
+      <h2>13. Contact</h2>
+      <p><strong>Crest88 LLC</strong> &middot; <a href="mailto:hello@crest88.com">hello@crest88.com</a></p>
+      <p>If you have a concern we haven't resolved, you can also contact your local data-protection authority where applicable.</p>
     </div>
   </div>
 </main>
