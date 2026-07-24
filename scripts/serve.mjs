@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-import { createReadStream } from "node:fs";
-import { access, stat } from "node:fs/promises";
+import { open, realpath, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -46,6 +45,16 @@ const privateRootEntries = new Set([
   "tests",
 ]);
 
+function isWithinRoot(containingRoot, target) {
+  const relativeTarget = path.relative(containingRoot, target);
+  return (
+    relativeTarget === "" ||
+    (relativeTarget !== ".." &&
+      !relativeTarget.startsWith(`..${path.sep}`) &&
+      !path.isAbsolute(relativeTarget))
+  );
+}
+
 async function fileForRequest(requestUrl) {
   let pathname;
   try {
@@ -67,10 +76,38 @@ async function fileForRequest(requestUrl) {
     if (!path.extname(absolutePath)) absolutePath = `${absolutePath}.html`;
   }
 
+  let fileHandle;
   try {
-    await access(absolutePath);
-    return (await stat(absolutePath)).isFile() ? absolutePath : null;
+    const [resolvedRoot, resolvedTarget] = await Promise.all([
+      realpath(root),
+      realpath(absolutePath),
+    ]);
+    if (!isWithinRoot(resolvedRoot, resolvedTarget)) return null;
+
+    // Open the canonical path once, then verify the opened inode still matches that path.
+    // The response streams this pinned handle so a later symlink swap cannot change its bytes.
+    fileHandle = await open(resolvedTarget, "r");
+    const [openedStats, confirmedTarget] = await Promise.all([
+      fileHandle.stat(),
+      realpath(resolvedTarget),
+    ]);
+    if (!isWithinRoot(resolvedRoot, confirmedTarget)) {
+      await fileHandle.close();
+      return null;
+    }
+    const confirmedStats = await stat(confirmedTarget);
+    if (
+      !openedStats.isFile() ||
+      openedStats.dev !== confirmedStats.dev ||
+      openedStats.ino !== confirmedStats.ino
+    ) {
+      await fileHandle.close();
+      return null;
+    }
+
+    return { absolutePath: confirmedTarget, fileHandle };
   } catch {
+    await fileHandle?.close();
     return null;
   }
 }
@@ -85,22 +122,27 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  const absolutePath = await fileForRequest(request.url || "/");
-  if (!absolutePath) {
+  const publicFile = await fileForRequest(request.url || "/");
+  if (!publicFile) {
     response.writeHead(404, { "content-type": "text/plain; charset=utf-8" });
     response.end("Not found\n");
     return;
   }
 
+  const { absolutePath, fileHandle } = publicFile;
   response.writeHead(200, {
     "cache-control": "no-store",
     "content-type": contentTypes.get(path.extname(absolutePath).toLowerCase()) || "application/octet-stream",
   });
   if (request.method === "HEAD") {
+    await fileHandle.close();
     response.end();
     return;
   }
-  createReadStream(absolutePath).pipe(response);
+  const stream = fileHandle.createReadStream({ autoClose: true });
+  stream.on("error", () => response.destroy());
+  response.on("close", () => stream.destroy());
+  stream.pipe(response);
 });
 
 server.listen(port, "127.0.0.1", () => {
