@@ -158,7 +158,6 @@ canvas {
 }
 
 .brand-orb {
-  --primary: var(--primary);
   display: grid;
   width: 32px;
   height: 32px;
@@ -393,6 +392,12 @@ h4 {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.desk-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
 }
 
 .desk-header h2 {
@@ -812,6 +817,68 @@ h4 {
   justify-content: space-between;
   padding: 15px 20px;
   border-top: 1px solid var(--border-strong);
+}
+
+.outcome-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.motion-toggle {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background 160ms ease;
+}
+
+.motion-toggle:hover {
+  border-color: var(--primary-line);
+  color: var(--primary);
+}
+
+.motion-toggle[aria-pressed="true"] {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.motion-toggle:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.motion-toggle svg {
+  width: 12px;
+  height: 12px;
+}
+
+.motion-toggle-dark {
+  border-color: hsl(0 0% 100% / 0.16);
+  background: hsl(0 0% 100% / 0.06);
+  color: hsl(229 20% 79%);
+}
+
+.motion-toggle-dark:hover,
+.motion-toggle-dark[aria-pressed="true"] {
+  border-color: hsl(235 72% 70% / 0.55);
+  background: hsl(235 72% 61% / 0.15);
+  color: hsl(235 90% 78%);
 }
 
 .carousel-button {
@@ -1476,6 +1543,11 @@ html[data-motion="ready"] .reveal[data-visible="true"] {
     padding: 24px 20px;
   }
 
+  .desk-status {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .desk-orb {
     width: 54px;
     height: 54px;
@@ -1518,6 +1590,14 @@ html[data-motion="ready"] .reveal[data-visible="true"] {
 
   .outcome-card {
     padding: 24px 20px;
+  }
+
+  .outcome-status {
+    gap: 9px;
+  }
+
+  .motion-toggle {
+    padding-inline: 9px;
   }
 
   .outcome-details {

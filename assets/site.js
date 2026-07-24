@@ -38,6 +38,21 @@
     target.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icons[name]}</svg>`;
   }
 
+  function setMotionToggle(toggle, paused) {
+    const locked = reducedMotion.matches;
+    const icon = toggle.querySelector('[data-motion-icon]');
+    const label = toggle.querySelector('[data-motion-label]');
+    toggle.disabled = locked;
+    toggle.setAttribute('aria-pressed', String(paused || locked));
+    toggle.setAttribute('aria-label', locked
+      ? 'Automatic motion paused by your device preference'
+      : paused ? 'Play automatic rotation' : 'Pause automatic rotation');
+    label.textContent = locked ? 'Motion paused' : paused ? 'Play' : 'Pause';
+    icon.innerHTML = paused || locked
+      ? '<path d="M8 5v14l11-7z"/>'
+      : '<path d="M7 5h3v14H7zM14 5h3v14h-3z"/>';
+  }
+
   function setupNavigation() {
     const nav = document.querySelector('.site-nav');
     if (!nav) return;
@@ -63,8 +78,10 @@
     const handled = scene.querySelector('[data-handled-status]');
     const approve = scene.querySelector('[data-approve]');
     const deny = scene.querySelector('[data-deny]');
+    const toggle = scene.querySelector('[data-agent-toggle]');
     let active = 0;
-    let paused = false;
+    let userPaused = reducedMotion.matches;
+    let interactionPaused = false;
     let decision = 'pending';
     let transitionTimer = 0;
 
@@ -108,13 +125,7 @@
     }
 
     function next() {
-      if (paused) return;
-      if (reducedMotion.matches) {
-        active = (active + 1) % 10;
-        decision = 'pending';
-        render();
-        return;
-      }
+      if (userPaused || interactionPaused || reducedMotion.matches || document.hidden) return;
       row.dataset.transition = 'out';
       window.clearTimeout(transitionTimer);
       transitionTimer = window.setTimeout(() => {
@@ -126,7 +137,8 @@
 
     function decide(nextDecision) {
       decision = nextDecision;
-      paused = true;
+      userPaused = true;
+      setMotionToggle(toggle, userPaused);
       render();
     }
 
@@ -137,18 +149,27 @@
       render();
     });
     scene.addEventListener('mouseenter', () => {
-      paused = true;
+      interactionPaused = true;
     });
     scene.addEventListener('mouseleave', () => {
-      paused = false;
+      interactionPaused = false;
     });
     scene.addEventListener('focusin', () => {
-      paused = true;
+      interactionPaused = true;
     });
     scene.addEventListener('focusout', (event) => {
-      if (!scene.contains(event.relatedTarget)) paused = false;
+      if (!scene.contains(event.relatedTarget)) interactionPaused = false;
+    });
+    toggle.addEventListener('click', () => {
+      userPaused = !userPaused;
+      setMotionToggle(toggle, userPaused);
+    });
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) userPaused = true;
+      setMotionToggle(toggle, userPaused);
     });
 
+    setMotionToggle(toggle, userPaused);
     render();
     window.setInterval(next, 4400);
   }
@@ -162,10 +183,12 @@
     const previous = carousel.querySelector('[data-outcome-previous]');
     const next = carousel.querySelector('[data-outcome-next]');
     const count = carousel.querySelector('[data-outcome-count]');
+    const toggle = carousel.querySelector('[data-outcome-toggle]');
     const media = window.matchMedia('(max-width: 1000px)');
     let visible = media.matches ? 1 : 3;
     let active = 0;
-    let paused = false;
+    let userPaused = reducedMotion.matches;
+    let interactionPaused = false;
     let changing = false;
     let transitionTimer = 0;
 
@@ -229,20 +252,29 @@
       render();
     });
     carousel.addEventListener('mouseenter', () => {
-      paused = true;
+      interactionPaused = true;
     });
     carousel.addEventListener('mouseleave', () => {
-      paused = false;
+      interactionPaused = false;
     });
     carousel.addEventListener('focusin', () => {
-      paused = true;
+      interactionPaused = true;
     });
     carousel.addEventListener('focusout', (event) => {
-      if (!carousel.contains(event.relatedTarget)) paused = false;
+      if (!carousel.contains(event.relatedTarget)) interactionPaused = false;
+    });
+    toggle.addEventListener('click', () => {
+      userPaused = !userPaused;
+      setMotionToggle(toggle, userPaused);
+    });
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) userPaused = true;
+      setMotionToggle(toggle, userPaused);
     });
     window.setInterval(() => {
-      if (!paused && !reducedMotion.matches && !document.hidden) goNext();
+      if (!userPaused && !interactionPaused && !reducedMotion.matches && !document.hidden) goNext();
     }, 5600);
+    setMotionToggle(toggle, userPaused);
     render();
   }
 
