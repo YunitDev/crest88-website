@@ -224,6 +224,29 @@ test("identity assets keep their approved formats and dimensions", async () => {
     return width === 0 ? 256 : width;
   });
   assert.deepEqual(faviconSizes, [16, 32, 48]);
+  for (let index = 0; index < 3; index += 1) {
+    const directoryOffset = 6 + index * 16;
+    const imageOffset = favicon.readUInt32LE(directoryOffset + 12);
+    const imageSize = favicon.readUInt32LE(directoryOffset + 8);
+    const frame = favicon.subarray(imageOffset, imageOffset + imageSize);
+    assert.equal(frame.readUInt32LE(0), 40, `ICO frame ${index + 1} must use a DIB header`);
+    const frameWidth = frame.readInt32LE(4);
+    const frameHeight = frame.readInt32LE(8) / 2;
+    assert.equal(frame.readUInt16LE(14), 32, `ICO frame ${index + 1} must use 32-bit color`);
+    const alphaValues = Array.from(
+      { length: frameWidth * frameHeight },
+      (_, pixelIndex) => frame[40 + pixelIndex * 4 + 3],
+    );
+    assert.equal(
+      Math.min(...alphaValues),
+      0,
+      `ICO frame ${index + 1} must contain transparent pixels`,
+    );
+    assert.ok(
+      Math.max(...alphaValues) > 0,
+      `ICO frame ${index + 1} must retain visible orb pixels`,
+    );
+  }
 
   const faviconSvg = await readFile(path.join(root, "favicon.svg"), "utf8");
   assert.match(faviconSvg, /viewBox="0 0 32 32"/);
