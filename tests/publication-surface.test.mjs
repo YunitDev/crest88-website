@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  readFile,
+  rm,
+  symlink,
+  writeFile,
+} from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -59,11 +66,23 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
   }
 
   const port = 42_000 + (process.pid % 1_000);
+  const outsideDirectory = await mkdtemp(
+    path.join(tmpdir(), "crest88-server-outside-"),
+  );
+  const outsideFile = path.join(outsideDirectory, "outside.txt");
+  const linkedPath = path.join(root, `server-leak-${process.pid}.txt`);
+  await writeFile(outsideFile, "This file is outside the publishable site root.");
+  await symlink(outsideFile, linkedPath);
+
   const child = spawn(process.execPath, ["scripts/serve.mjs", "--port", String(port)], {
     cwd: root,
     stdio: ["ignore", "pipe", "pipe"],
   });
-  context.after(() => child.kill("SIGTERM"));
+  context.after(async () => {
+    child.kill("SIGTERM");
+    await rm(linkedPath, { force: true });
+    await rm(outsideDirectory, { force: true, recursive: true });
+  });
   await waitForServer(child);
 
   assert.equal((await fetch(`http://127.0.0.1:${port}/`)).status, 200);
@@ -85,4 +104,9 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
       `${pathname} should not be public`,
     );
   }
+  assert.equal(
+    (await fetch(`http://127.0.0.1:${port}/${path.basename(linkedPath)}`)).status,
+    404,
+    "a symlink must not expose a file outside the site root",
+  );
 });
