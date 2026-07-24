@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Crest88 — Put AI agents to work in your business</title>
+  <desc id="description">AI agents handle repeatable work while important actions wait for your approval.</desc>
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#5963e7" stop-opacity=".22"/>
+      <stop offset=".72" stop-color="#5963e7" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#5963e7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="20" stdDeviation="28" flood-color="#36408f" flood-opacity=".15"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="#f8f9ff"/>
+  <circle cx="1030" cy="70" r="430" fill="url(#glow)"/>
+  <path d="M0 560C250 505 412 600 650 548s341-57 550-16v98H0z" fill="#eef0ff"/>
+  <g transform="translate(70 62)">
+    <g transform="translate(0 2)">
+      <circle cx="25" cy="25" r="24" fill="#5963e7" opacity=".08"/>
+      <g fill="none" stroke="#5963e7" stroke-linecap="round">
+        <circle cx="25" cy="25" r="19" stroke-width="3" stroke-dasharray=".5 4.7"/>
+        <ellipse cx="25" cy="25" rx="10" ry="19" stroke-width="2.7" stroke-dasharray=".5 4.5"/>
+        <ellipse cx="25" cy="25" rx="19" ry="8" stroke-width="2.7" stroke-dasharray=".5 4.5"/>
+      </g>
+      <circle cx="25" cy="25" r="2.7" fill="#5963e7"/>
+    </g>
+    <text x="65" y="36" fill="#171925" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700">Crest88</text>
+  </g>
+  <g transform="translate(72 180)">
+    <text fill="#5963e7" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700" letter-spacing="4">AI AGENTS FOR GROWING BUSINESSES</text>
+    <text y="76" fill="#171925" font-family="Arial, Helvetica, sans-serif" font-size="61" font-weight="700">
+      <tspan x="0">Put AI agents to work</tspan>
+      <tspan x="0" dy="72">in your business.</tspan>
+    </text>
+    <text y="245" fill="#62687a" font-family="Arial, Helvetica, sans-serif" font-size="27">
+      <tspan x="0">They handle the repeatable work.</tspan>
+      <tspan x="0" dy="40">You approve anything important.</tspan>
+    </text>
+  </g>
+  <g transform="translate(812 118)" filter="url(#shadow)">
+    <circle cx="180" cy="180" r="174" fill="#fff" stroke="#cfd3ff" stroke-width="2"/>
+    <circle cx="180" cy="180" r="137" fill="#5963e7" opacity=".07"/>
+    <g fill="none" stroke="#5963e7" stroke-linecap="round">
+      <circle cx="180" cy="180" r="126" stroke-width="10" stroke-dasharray="1 18"/>
+      <ellipse cx="180" cy="180" rx="68" ry="126" stroke-width="9" stroke-dasharray="1 17"/>
+      <ellipse cx="180" cy="180" rx="126" ry="58" stroke-width="9" stroke-dasharray="1 17"/>
+      <path d="M65 135c62 43 168 43 230 0M65 225c62-43 168-43 230 0" stroke-width="8" stroke-dasharray="1 18"/>
+    </g>
+    <circle cx="180" cy="180" r="18" fill="#5963e7"/>
+  </g>
+</svg>
