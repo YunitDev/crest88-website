@@ -141,6 +141,13 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
     "/apple-touch-icon.png",
     "/crest88-mark.png",
     "/og.png",
+    "/assets/favicon-motion.js",
+    ...["light", "dark"].flatMap((theme) =>
+      Array.from(
+        { length: 8 },
+        (_, frame) => `/assets/favicon/motion-${theme}-${frame}.png`,
+      ),
+    ),
   ]) {
     assert.equal(
       (await fetch(`http://127.0.0.1:${port}${pathname}`)).status,
@@ -214,6 +221,19 @@ test("identity assets keep their approved formats and dimensions", async () => {
     pngDimensions(await readFile(path.join(root, "og.png"))),
     { width: 1200, height: 630 },
   );
+  for (const theme of ["light", "dark"]) {
+    for (let frame = 0; frame < 8; frame += 1) {
+      const faviconFrame = await readFile(
+        path.join(root, "assets", "favicon", `motion-${theme}-${frame}.png`),
+      );
+      assert.deepEqual(pngDimensions(faviconFrame), { width: 32, height: 32 });
+      assert.equal(
+        faviconFrame[25],
+        6,
+        `${theme} frame ${frame} must retain an RGBA color type`,
+      );
+    }
+  }
 
   const favicon = await readFile(path.join(root, "favicon.ico"));
   assert.equal(favicon.readUInt16LE(0), 0, "ICO reserved field must be zero");
@@ -251,5 +271,17 @@ test("identity assets keep their approved formats and dimensions", async () => {
   const faviconSvg = await readFile(path.join(root, "favicon.svg"), "utf8");
   assert.match(faviconSvg, /viewBox="0 0 32 32"/);
   assert.match(faviconSvg, /prefers-color-scheme:\s*dark/);
+  assert.match(faviconSvg, /<circle class="favicon-field"[^>]+r="15"/);
+  assert.match(faviconSvg, /\.favicon-field\s*\{\s*fill:\s*#101827/);
+  assert.match(faviconSvg, /\.favicon-field\s*\{\s*fill:\s*#f8f9ff/);
   assert.doesNotMatch(faviconSvg, /<rect\b/, "favicon should remain transparent");
+});
+
+test("every public page loads the approved favicon motion controller", async () => {
+  for (const page of ["index.html", "privacy.html", "terms.html"]) {
+    const html = await readFile(path.join(root, page), "utf8");
+    assert.match(html, /href="favicon\.ico\?v=3"/);
+    assert.match(html, /href="favicon\.svg\?v=3"/);
+    assert.match(html, /src="assets\/favicon-motion\.js\?v=3"/);
+  }
 });
