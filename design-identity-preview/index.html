@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crest88 identity asset review</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600&family=Plus+Jakarta+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: #171925;
+        background: #f5f6fc;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0 96px; }
+      h1, h2, h3 { font-family: "Space Grotesk", sans-serif; letter-spacing: -0.03em; }
+      h1 { max-width: 760px; margin: 0; font-size: clamp(2.8rem, 7vw, 5.8rem); line-height: .96; }
+      h2 { margin: 0; font-size: 1.7rem; }
+      p { color: #62687a; line-height: 1.7; }
+      .kicker { margin: 0 0 20px; color: #5963e7; font: 600 .78rem/1.2 "JetBrains Mono", monospace; letter-spacing: .14em; text-transform: uppercase; }
+      .intro { max-width: 720px; margin: 26px 0 60px; font-size: 1.08rem; }
+      .section { margin-top: 72px; }
+      .section-head { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 24px; }
+      .section-head p { max-width: 620px; margin: 0; }
+      .comparison { overflow: hidden; border-radius: 18px; background: #fff; box-shadow: 0 22px 52px rgba(42, 49, 98, .12); }
+      .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; }
+      .panel { min-width: 0; padding: 30px; }
+      .panel + .panel { border-left: 1px solid #e5e7f2; }
+      .panel-label { margin-bottom: 24px; color: #62687a; font: 600 .72rem/1.2 "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+      .size-row { display: flex; min-height: 160px; align-items: end; gap: 32px; }
+      .size-sample { display: grid; justify-items: center; gap: 12px; color: #62687a; font: 600 .7rem/1 "JetBrains Mono", monospace; }
+      .size-sample img { display: block; image-rendering: auto; }
+      .browser-tabs { display: grid; gap: 14px; margin-top: 28px; }
+      .fake-tab { display: flex; width: min(100%, 310px); align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #eceef6; font-size: .88rem; font-weight: 600; }
+      .fake-tab.dark { color: #f6f7ff; background: #20222c; }
+      .fake-tab img { width: 20px; height: 20px; }
+      .touch-row { display: flex; align-items: center; gap: 32px; }
+      .touch-row img { width: 180px; height: 180px; }
+      .touch-note { max-width: 360px; }
+      .og-frame { overflow: hidden; border: 1px solid #dfe2ef; border-radius: 14px; background: #fff; }
+      .og-frame img { display: block; width: 100%; height: auto; }
+      .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px; }
+      .verdict > div { padding: 22px; border-radius: 14px; background: #eef0ff; }
+      .verdict strong { display: block; margin-bottom: 8px; }
+
+      @media (max-width: 760px) {
+        main { width: min(100% - 28px, 1180px); padding-top: 48px; }
+        .comparison-grid, .verdict { grid-template-columns: 1fr; }
+        .panel + .panel { border-top: 1px solid #e5e7f2; border-left: 0; }
+        .section-head { display: block; }
+        .section-head p { margin-top: 10px; }
+        .size-row { flex-wrap: wrap; }
+        .touch-row { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Identity asset review · issue 2192</p>
+      <h1>One orb, at every scale.</h1>
+      <p class="intro">The released site already has the right mark: the animated spherical ribbon. This preview replaces the unrelated latitude/longitude globe in browser, app, and social assets with the orb’s exact reduced-motion frame.</p>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Browser favicon</h2>
+          <p>The proposed mark is transparent and keeps the live orb’s silhouette. Dot scale is tuned around the sizes browsers actually display.</p>
+        </div>
+        <div class="comparison">
+          <div class="comparison-grid">
+            <article class="panel">
+              <div class="panel-label">Current · substitute globe</div>
+              <div class="size-row">
+                <div class="size-sample"><img src="current-favicon-16.png" width="16" height="16" alt=""><span>16</span></div>
+                <div class="size-sample"><img src="current-favicon-24.png" width="24" height="24" alt=""><span>24</span></div>
+                <div class="size-sample"><img src="current-favicon-32.png" width="32" height="32" alt=""><span>32</span></div>
+                <div class="size-sample"><img src="current-favicon-48.png" width="48" height="48" alt=""><span>48</span></div>
+              </div>
+              <div class="browser-tabs">
+                <div class="fake-tab"><img src="../favicon.svg" alt="">Crest88</div>
+                <div class="fake-tab dark"><img src="../favicon.svg" alt="">Crest88</div>
+              </div>
+            </article>
+            <article class="panel">
+              <div class="panel-label">Proposed · canonical ribbon</div>
+              <div class="size-row">
+                <div class="size-sample"><img src="candidate-favicon-16.png" width="16" height="16" alt=""><span>16</span></div>
+                <div class="size-sample"><img src="candidate-favicon-24.png" width="24" height="24" alt=""><span>24</span></div>
+                <div class="size-sample"><img src="candidate-favicon-32.png" width="32" height="32" alt=""><span>32</span></div>
+                <div class="size-sample"><img src="candidate-favicon-48.png" width="48" height="48" alt=""><span>48</span></div>
+              </div>
+              <div class="browser-tabs">
+                <div class="fake-tab"><img src="candidate-favicon.svg" alt="">Crest88</div>
+                <div class="fake-tab dark"><img src="candidate-favicon-dark.svg" alt="">Crest88</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Saved app icon</h2>
+          <p>The pale platform tile remains, but its center is now the same ribbon mark. A slightly larger safe area keeps the orb legible after iOS masking.</p>
+        </div>
+        <div class="comparison">
+          <div class="comparison-grid">
+            <article class="panel">
+              <div class="panel-label">Current</div>
+              <div class="touch-row">
+                <img src="../apple-touch-icon.png" alt="Current Crest88 touch icon">
+                <p class="touch-note">The globe reads clearly, but it is not the mark currently used by the product or public site.</p>
+              </div>
+            </article>
+            <article class="panel">
+              <div class="panel-label">Proposed</div>
+              <div class="touch-row">
+                <img src="candidate-touch.png" alt="Proposed Crest88 touch icon">
+                <p class="touch-note">Same cool daylight tile, now with the canonical spherical ribbon and no competing geometry.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Open Graph image</h2>
+          <p>The message stays unchanged. The white medallion and generic wave are removed so the real orb can own the composition.</p>
+        </div>
+        <div class="comparison">
+          <div class="comparison-grid">
+            <article class="panel">
+              <div class="panel-label">Current</div>
+              <div class="og-frame"><img src="../og.png" alt="Current Crest88 Open Graph image"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-label">Proposed</div>
+              <div class="og-frame"><img src="candidate-og.png" alt="Proposed Crest88 Open Graph image"></div>
+            </article>
+          </div>
+        </div>
+        <div class="verdict">
+          <div><strong>Preserved</strong><span>Positioning, product promise, typography hierarchy, light Operator palette, and 1200×630 crop.</span></div>
+          <div><strong>Corrected</strong><span>Canonical mark parity, favicon transparency, touch-icon safe area, social-card ornament, and a missing multi-size <code>favicon.ico</code> fallback.</span></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
