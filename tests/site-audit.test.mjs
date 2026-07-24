@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdtemp, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -84,6 +84,52 @@ test("validates fragments after a query string", async () => {
     findings.some(
       (finding) =>
         finding.code === "broken-fragment" && finding.reference === invalidReference,
+    ),
+  );
+});
+
+test("rejects encoded paths that traverse outside the site root", async () => {
+  const root = await makeSite();
+  const outsideFile = path.join(
+    path.dirname(root),
+    `${path.basename(root)}-outside.txt`,
+  );
+  await writeFile(outsideFile, "This sibling must never be accepted as a site asset.");
+  const encodedTraversal = `/%2e%2e%2f${path.basename(outsideFile)}`;
+  await writeFile(
+    path.join(root, "index.html"),
+    VALID_PAGE.replace("privacy.html", encodedTraversal),
+  );
+
+  const findings = await auditSite(root);
+  assert.ok(
+    findings.some(
+      (finding) =>
+        finding.code === "broken-internal-link" &&
+        finding.reference === encodedTraversal,
+    ),
+  );
+});
+
+test("rejects symlinks that resolve outside the site root", async () => {
+  const root = await makeSite();
+  const outsideFile = path.join(
+    path.dirname(root),
+    `${path.basename(root)}-symlink-target.txt`,
+  );
+  await writeFile(outsideFile, "This external target must not join the public site.");
+  await symlink(outsideFile, path.join(root, "external-link.txt"));
+  await writeFile(
+    path.join(root, "index.html"),
+    VALID_PAGE.replace("privacy.html", "external-link.txt"),
+  );
+
+  const findings = await auditSite(root);
+  assert.ok(
+    findings.some(
+      (finding) =>
+        finding.code === "broken-internal-link" &&
+        finding.reference === "external-link.txt",
     ),
   );
 });
