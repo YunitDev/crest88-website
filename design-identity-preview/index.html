@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Review the proposed subtle motion treatment for the transparent Crest88 favicon.">
     <title>Crest88 identity asset review</title>
+    <link rel="icon" type="image/svg+xml" href="candidate-favicon.svg" data-motion-icon>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600&family=Plus+Jakarta+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -47,6 +49,16 @@
       .verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px; }
       .verdict > div { padding: 22px; border-radius: 14px; background: #eef0ff; }
       .verdict strong { display: block; margin-bottom: 8px; }
+      .motion-demo { display: grid; grid-template-columns: 240px 1fr; align-items: center; gap: 44px; padding: 34px; border-radius: 18px; color: #f8f9ff; background: #101827; box-shadow: 0 24px 56px rgba(17, 24, 46, .22); }
+      .motion-orb { display: grid; min-height: 200px; place-items: center; border-radius: 16px; background: radial-gradient(circle, rgba(89, 99, 231, .18), rgba(89, 99, 231, 0) 68%); }
+      .motion-orb img { width: 112px; height: 112px; image-rendering: auto; }
+      .motion-demo h2 { margin-bottom: 12px; font-size: 2rem; }
+      .motion-demo p { max-width: 580px; color: #bfc5d7; }
+      .motion-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0; padding: 0; list-style: none; }
+      .motion-meta li { padding: 7px 11px; border: 1px solid rgba(137, 145, 255, .3); border-radius: 999px; color: #d8dbff; font: 600 .68rem/1 "JetBrains Mono", monospace; }
+      .motion-toggle { min-height: 42px; padding: 9px 15px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: #f8f9ff; background: rgba(255,255,255,.06); cursor: pointer; font: 700 .8rem/1 "Plus Jakarta Sans", sans-serif; }
+      .motion-toggle:focus-visible { outline: 3px solid #8991ff; outline-offset: 3px; }
+      .motion-toggle:disabled { cursor: default; opacity: .58; }
 
       @media (max-width: 760px) {
         main { width: min(100% - 28px, 1180px); padding-top: 48px; }
@@ -56,14 +68,38 @@
         .section-head p { margin-top: 10px; }
         .size-row { flex-wrap: wrap; }
         .touch-row { align-items: flex-start; flex-direction: column; }
+        .motion-demo { grid-template-columns: 1fr; gap: 22px; }
+        .motion-orb { min-height: 180px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .motion-demo::after { content: "Reduced motion is active — the favicon remains static."; display: block; color: #d8dbff; font-size: .8rem; }
       }
     </style>
   </head>
   <body>
     <main>
-      <p class="kicker">Identity asset review · issue 2192</p>
+      <p class="kicker">Favicon motion review · issue 2197</p>
       <h1>One orb, at every scale.</h1>
       <p class="intro">The released site already has the right mark: the animated spherical ribbon. This preview replaces the unrelated latitude/longitude globe in browser, app, and social assets with the orb’s exact reduced-motion frame.</p>
+
+      <section class="motion-demo" aria-labelledby="motion-title">
+        <div class="motion-orb" aria-hidden="true">
+          <img src="candidate-favicon.svg" alt="" data-motion-preview>
+        </div>
+        <div>
+          <p class="kicker">Live favicon preview</p>
+          <h2 id="motion-title">Quietly thinking, never spinning.</h2>
+          <p>Watch the browser tab and the enlarged mark together. Eight transparent frames gently reshape the ribbon over four seconds, then return without a hard cut.</p>
+          <ul class="motion-meta">
+            <li>2 fps</li>
+            <li>4 second loop</li>
+            <li>Active tab only</li>
+            <li>Reduced-motion safe</li>
+          </ul>
+          <button class="motion-toggle" type="button" data-motion-toggle aria-pressed="false">Pause motion</button>
+        </div>
+      </section>
 
       <section class="section">
         <div class="section-head">
@@ -150,5 +186,6 @@
         </div>
       </section>
     </main>
+    <script src="favicon-motion-preview.js"></script>
   </body>
 </html>

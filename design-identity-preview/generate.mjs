@@ -99,8 +99,8 @@ function orbDots(size, time = 0.6) {
   return dots.sort((a, b) => a.z - b.z);
 }
 
-function dotMarkup(size, className = 'orb-dot') {
-  return orbDots(size)
+function dotMarkup(size, className = 'orb-dot', time = 0.6) {
+  return orbDots(size, time)
     .map(({ x, y, r, opacity }) => {
       const doubledOpacity = 1 - (1 - opacity) ** 2;
       return `<circle class="${className}" cx="${x.toFixed(3)}" cy="${y.toFixed(3)}" r="${r.toFixed(3)}" opacity="${doubledOpacity.toFixed(3)}"/>`;
@@ -217,3 +217,33 @@ execFileSync('magick', [
   resolve(previewDir, 'candidate-favicon-48.png'),
   resolve(previewDir, 'candidate-favicon.ico'),
 ]);
+
+function motionFrameSvg(color, time) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Crest88 thinking orb">
+  <g fill="${color}">${dotMarkup(32, 'dot', time)}</g>
+</svg>`;
+}
+
+for (let frame = 0; frame < 8; frame += 1) {
+  const phase = (frame / 8) * Math.PI * 2;
+  const time = 0.6 + 1.15 * Math.sin(phase);
+  for (const [theme, color] of [
+    ['light', primary],
+    ['dark', '#8991ff'],
+  ]) {
+    const sourceName = `motion-${theme}-${frame}.svg`;
+    const outputName = `motion-${theme}-${frame}.png`;
+    writeFileSync(resolve(previewDir, sourceName), motionFrameSvg(color, time));
+    execFileSync('magick', [
+      '-background',
+      'none',
+      resolve(previewDir, sourceName),
+      '-alpha',
+      'on',
+      '-resize',
+      '32x32',
+      resolve(previewDir, outputName),
+    ]);
+  }
+}
