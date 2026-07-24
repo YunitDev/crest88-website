@@ -136,6 +136,19 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
 
   assert.equal((await fetch(`http://127.0.0.1:${port}/`)).status, 200);
   for (const pathname of [
+    "/favicon.svg",
+    "/favicon.ico",
+    "/apple-touch-icon.png",
+    "/crest88-mark.png",
+    "/og.png",
+  ]) {
+    assert.equal(
+      (await fetch(`http://127.0.0.1:${port}${pathname}`)).status,
+      200,
+      `${pathname} should be publicly available`,
+    );
+  }
+  for (const pathname of [
     "/.github/workflows/site-checks.yml",
     "/.gitignore",
     "/_config.yml",
@@ -174,4 +187,46 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
       `a public symlink must not alias private root entry ${probe.entry}`,
     );
   }
+});
+
+test("identity assets keep their approved formats and dimensions", async () => {
+  function pngDimensions(buffer) {
+    assert.equal(
+      buffer.subarray(0, 8).toString("hex"),
+      "89504e470d0a1a0a",
+      "asset must use the PNG signature",
+    );
+    return {
+      width: buffer.readUInt32BE(16),
+      height: buffer.readUInt32BE(20),
+    };
+  }
+
+  assert.deepEqual(
+    pngDimensions(await readFile(path.join(root, "apple-touch-icon.png"))),
+    { width: 180, height: 180 },
+  );
+  assert.deepEqual(
+    pngDimensions(await readFile(path.join(root, "crest88-mark.png"))),
+    { width: 88, height: 88 },
+  );
+  assert.deepEqual(
+    pngDimensions(await readFile(path.join(root, "og.png"))),
+    { width: 1200, height: 630 },
+  );
+
+  const favicon = await readFile(path.join(root, "favicon.ico"));
+  assert.equal(favicon.readUInt16LE(0), 0, "ICO reserved field must be zero");
+  assert.equal(favicon.readUInt16LE(2), 1, "ICO must identify as an icon");
+  assert.equal(favicon.readUInt16LE(4), 3, "ICO must contain three sizes");
+  const faviconSizes = Array.from({ length: 3 }, (_, index) => {
+    const width = favicon[6 + index * 16];
+    return width === 0 ? 256 : width;
+  });
+  assert.deepEqual(faviconSizes, [16, 32, 48]);
+
+  const faviconSvg = await readFile(path.join(root, "favicon.svg"), "utf8");
+  assert.match(faviconSvg, /viewBox="0 0 32 32"/);
+  assert.match(faviconSvg, /prefers-color-scheme:\s*dark/);
+  assert.doesNotMatch(faviconSvg, /<rect\b/, "favicon should remain transparent");
 });
