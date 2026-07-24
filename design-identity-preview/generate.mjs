@@ -189,18 +189,22 @@ render('candidate-touch.svg', 'candidate-touch.png');
 render('candidate-og.svg', 'candidate-og.png', '-alpha', 'off', '-colorspace', 'sRGB');
 
 for (const size of [16, 24, 32, 48]) {
-  render(
-    'candidate-favicon.svg',
-    `candidate-favicon-${size}.png`,
+  execFileSync('magick', [
     '-background',
     'none',
+    resolve(previewDir, 'candidate-favicon.svg'),
+    '-alpha',
+    'on',
     '-resize',
     `${size}x${size}`,
-  );
+    resolve(previewDir, `candidate-favicon-${size}.png`),
+  ]);
   execFileSync('magick', [
-    resolve(projectRoot, 'favicon.svg'),
     '-background',
     'none',
+    resolve(projectRoot, 'favicon.svg'),
+    '-alpha',
+    'on',
     '-resize',
     `${size}x${size}`,
     resolve(previewDir, `current-favicon-${size}.png`),
