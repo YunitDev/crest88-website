@@ -1,0 +1,16 @@
+{
+  "name": "crest88-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static public website for Crest88.",
+  "type": "module",
+  "scripts": {
+    "check": "npm run check:site && npm test",
+    "check:site": "node scripts/check-site.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
