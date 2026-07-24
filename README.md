@@ -8,6 +8,7 @@ Source for [crest88.com](https://crest88.com), the public website for Crest88's 
 - GitHub Pages from `main`
 - Custom domain preserved by `CNAME`
 - No analytics or marketing cookies
+- Jekyll publication exclusions in `_config.yml` keep repository tooling off the public site
 
 The `epic/operator-public-site` branch is the non-production integration target. A pull request
 must not be merged to `main` until the complete site has been reviewed as a local production build.
@@ -48,6 +49,7 @@ The gate checks:
 - duplicate IDs and safe external-tab links
 - CSS delimiter balance and JavaScript parse validity
 - regression tests for broken links and missing metadata
+- parity between the local preview surface and the files GitHub Pages may publish
 
 Pull requests into `epic/operator-public-site` and `main` run
 `.github/workflows/site-checks.yml`. Repository administrators must configure the `Static site`

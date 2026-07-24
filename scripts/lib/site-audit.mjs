@@ -4,6 +4,13 @@ import path from "node:path";
 import vm from "node:vm";
 
 const IGNORED_DIRECTORIES = new Set([".git", "node_modules"]);
+const CLASSIC_SCRIPT_TYPES = new Set([
+  "",
+  "application/ecmascript",
+  "application/javascript",
+  "text/ecmascript",
+  "text/javascript",
+]);
 const VOID_ELEMENTS = new Set([
   "area",
   "base",
@@ -41,8 +48,12 @@ function stripMarkup(value) {
   return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function stripHtmlComments(html) {
+  return html.replace(/<!--[\s\S]*?-->/g, "");
+}
+
 function markupWithoutInlineCode(html) {
-  return html.replace(
+  return stripHtmlComments(html).replace(
     /<(script|style)\b([^>]*)>[\s\S]*?<\/\1>/gi,
     (_block, element, attributes) => `<${element}${attributes}></${element}>`,
   );
@@ -91,10 +102,6 @@ function idsIn(html) {
   }
 
   return ids;
-}
-
-function removeQuery(value) {
-  return value.split("?")[0];
 }
 
 function isExternalReference(reference) {
@@ -212,7 +219,7 @@ function delimiterError(source, pairs) {
 
 function htmlTagError(html) {
   const stack = [];
-  const markup = markupWithoutInlineCode(html).replace(/<!--[\s\S]*?-->/g, "");
+  const markup = markupWithoutInlineCode(html);
 
   for (const match of markup.matchAll(/<\/?([a-z][\w:-]*)\b[^>]*>/gi)) {
     const fullTag = match[0];
@@ -256,20 +263,29 @@ async function exists(target) {
 }
 
 async function resolveSiteTarget(root, sourceFile, reference) {
-  const [pathReference, fragment = ""] = removeQuery(reference).split("#", 2);
-  if (!pathReference && !fragment) return { exists: true };
-
-  let target = pathReference
-    ? pathReference.startsWith("/")
-      ? path.join(root, pathReference.slice(1))
-      : path.resolve(path.dirname(sourceFile), pathReference)
-    : sourceFile;
-
-  const relativeTarget = path.relative(root, target);
-  if (relativeTarget.startsWith("..") || path.isAbsolute(relativeTarget)) {
+  const sourcePath = path.relative(root, sourceFile).split(path.sep).join("/");
+  const baseUrl = new URL(sourcePath, "https://crest88.test/");
+  let referenceUrl;
+  try {
+    referenceUrl = new URL(reference, baseUrl);
+  } catch {
     return { exists: false };
   }
 
+  if (referenceUrl.origin !== baseUrl.origin) {
+    return { exists: false };
+  }
+
+  let pathReference;
+  let fragment;
+  try {
+    pathReference = decodeURIComponent(referenceUrl.pathname);
+    fragment = decodeURIComponent(referenceUrl.hash.slice(1));
+  } catch {
+    return { exists: false };
+  }
+
+  let target = path.join(root, pathReference.replace(/^\/+/, ""));
   if (await exists(target)) {
     const targetStats = await stat(target);
     if (targetStats.isDirectory()) target = path.join(target, "index.html");
@@ -280,19 +296,20 @@ async function resolveSiteTarget(root, sourceFile, reference) {
   if (!(await exists(target))) return { exists: false };
   if (!fragment || path.extname(target).toLowerCase() !== ".html") return { exists: true };
 
-  const targetHtml = await readFile(target, "utf8");
+  const targetHtml = markupWithoutInlineCode(await readFile(target, "utf8"));
   return { exists: true, fragmentExists: new Set(idsIn(targetHtml)).has(fragment) };
 }
 
 function auditHtmlStructure(relativeFile, html) {
   const findings = [];
-  const markup = markupWithoutInlineCode(html);
+  const uncommentedHtml = stripHtmlComments(html);
+  const markup = markupWithoutInlineCode(uncommentedHtml);
   const metadata = metadataMap(markup);
   const relations = linkRelations(markup);
   const title = markup.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1];
   const requiredMetadata = ["charset", "viewport", "description"];
 
-  if (!/^\s*<!doctype html>/i.test(html)) {
+  if (!/^\s*<!doctype html>/i.test(uncommentedHtml)) {
     findings.push(finding(relativeFile, "invalid-html", "Document must start with an HTML doctype."));
   }
   const tagError = htmlTagError(html);
@@ -410,7 +427,9 @@ function auditHtmlStructure(relativeFile, html) {
     }
   }
 
-  const styleBlocks = [...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)];
+  const styleBlocks = [
+    ...uncommentedHtml.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi),
+  ];
   for (const [index, match] of styleBlocks.entries()) {
     const error = delimiterError(match[1], { "{": "}", "(": ")", "[": "]" });
     if (error) {
@@ -420,9 +439,37 @@ function auditHtmlStructure(relativeFile, html) {
     }
   }
 
-  const scriptBlocks = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+  const scriptBlocks = [
+    ...uncommentedHtml.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi),
+  ];
   for (const [index, match] of scriptBlocks.entries()) {
-    if (parseAttributes(`<script ${match[1]}>`).get("src")) continue;
+    const attributes = parseAttributes(`<script ${match[1]}>`);
+    if (attributes.get("src")) continue;
+    const scriptType = (attributes.get("type") || "")
+      .trim()
+      .toLowerCase()
+      .split(";", 1)[0];
+    const scriptLabel = `Inline script ${index + 1}`;
+
+    if (scriptType === "module") {
+      const result = spawnSync(process.execPath, ["--check", "--input-type=module"], {
+        encoding: "utf8",
+        input: match[2],
+      });
+      if (result.status !== 0) {
+        findings.push(
+          finding(
+            relativeFile,
+            "invalid-javascript",
+            `${scriptLabel} does not parse: ${(result.stderr || result.stdout).trim()}`,
+          ),
+        );
+      }
+      continue;
+    }
+
+    if (!CLASSIC_SCRIPT_TYPES.has(scriptType)) continue;
+
     try {
       new vm.Script(match[2], { filename: `${relativeFile}:script-${index + 1}` });
     } catch (error) {
@@ -430,7 +477,7 @@ function auditHtmlStructure(relativeFile, html) {
         finding(
           relativeFile,
           "invalid-javascript",
-          `Inline script ${index + 1} does not parse: ${error.message}`,
+          `${scriptLabel} does not parse: ${error.message}`,
         ),
       );
     }

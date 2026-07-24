@@ -94,6 +94,8 @@ test("ignores markup-like content inside HTML comments", async () => {
     <img src="missing-from-comment.png">
     <div id="content"></div>
     <input id="commented-input">
+    <script type="module">export const = 1;</script>
+    <style>body {</style>
   -->`;
   const root = await makeSite(VALID_PAGE.replace("<body>", `<body>${commentedNoise}`));
 

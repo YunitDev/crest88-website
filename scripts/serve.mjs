@@ -36,6 +36,7 @@ const privateRootEntries = new Set([
   ".git",
   ".github",
   ".gitignore",
+  "_config.yml",
   "CLAUDE.md",
   "README.md",
   "node_modules",
