@@ -71,8 +71,10 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
   );
   const outsideFile = path.join(outsideDirectory, "outside.txt");
   const linkedPath = path.join(root, `server-leak-${process.pid}.txt`);
+  const privateAliasPath = path.join(root, "public-alias.json");
   await writeFile(outsideFile, "This file is outside the publishable site root.");
   await symlink(outsideFile, linkedPath);
+  await symlink(path.join(root, "package.json"), privateAliasPath);
 
   const child = spawn(process.execPath, ["scripts/serve.mjs", "--port", String(port)], {
     cwd: root,
@@ -81,6 +83,7 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
   context.after(async () => {
     child.kill("SIGTERM");
     await rm(linkedPath, { force: true });
+    await rm(privateAliasPath, { force: true });
     await rm(outsideDirectory, { force: true, recursive: true });
   });
   await waitForServer(child);
@@ -108,5 +111,10 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
     (await fetch(`http://127.0.0.1:${port}/${path.basename(linkedPath)}`)).status,
     404,
     "a symlink must not expose a file outside the site root",
+  );
+  assert.equal(
+    (await fetch(`http://127.0.0.1:${port}/public-alias.json`)).status,
+    404,
+    "a public symlink must not alias a private in-root file",
   );
 });
