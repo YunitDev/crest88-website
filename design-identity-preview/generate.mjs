@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 const previewDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(previewDir, '..');
 const primary = '#5963e7';
+const ink = '#101827';
+const paper = '#f8f9ff';
 
 function fibonacciSpherePoint(index, count) {
   const golden = Math.PI * (3 - Math.sqrt(5));
@@ -108,18 +110,31 @@ function dotMarkup(size, className = 'orb-dot', time = 0.6) {
     .join('');
 }
 
-const faviconSvg = `<?xml version="1.0" encoding="UTF-8"?>
+function faviconBadgeSvg(background, foreground, { adaptive = false } = {}) {
+  const themeStyles = adaptive
+    ? `
+    .favicon-field { fill: ${ink}; }
+    .orb-dot { fill: ${paper}; }
+    @media (prefers-color-scheme: dark) {
+      .favicon-field { fill: ${paper}; }
+      .orb-dot { fill: ${primary}; }
+    }`
+    : `
+    .favicon-field { fill: ${background}; }
+    .orb-dot { fill: ${foreground}; }`;
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Crest88 orb">
-  <style>
-    .orb-dot { fill: ${primary}; }
-    @media (prefers-color-scheme: dark) { .orb-dot { fill: #8991ff; } }
+  <style>${themeStyles}
   </style>
+  <circle class="favicon-field" cx="16" cy="16" r="15"/>
   ${dotMarkup(32)}
 </svg>`;
+}
 
-const darkFaviconSvg = faviconSvg
-  .replace('${primary}', primary)
-  .replaceAll(primary, '#8991ff');
+const faviconSvg = faviconBadgeSvg(ink, paper, { adaptive: true });
+const lightFaviconSvg = faviconBadgeSvg(ink, paper);
+const darkFaviconSvg = faviconBadgeSvg(paper, primary);
 
 const markSvg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88" role="img" aria-label="Crest88 orb">
@@ -171,6 +186,7 @@ const ogSvg = `<?xml version="1.0" encoding="UTF-8"?>
 </svg>`;
 
 writeFileSync(resolve(previewDir, 'candidate-favicon.svg'), faviconSvg);
+writeFileSync(resolve(previewDir, 'candidate-favicon-light.svg'), lightFaviconSvg);
 writeFileSync(resolve(previewDir, 'candidate-favicon-dark.svg'), darkFaviconSvg);
 writeFileSync(resolve(previewDir, 'candidate-mark.svg'), markSvg);
 writeFileSync(resolve(previewDir, 'candidate-touch.svg'), touchSvg);
@@ -218,23 +234,27 @@ execFileSync('magick', [
   resolve(previewDir, 'candidate-favicon.ico'),
 ]);
 
-function motionFrameSvg(color, time) {
+function motionFrameSvg(background, foreground, time) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Crest88 thinking orb">
-  <g fill="${color}">${dotMarkup(32, 'dot', time)}</g>
+  <circle cx="16" cy="16" r="15" fill="${background}"/>
+  <g fill="${foreground}">${dotMarkup(32, 'dot', time)}</g>
 </svg>`;
 }
 
 for (let frame = 0; frame < 8; frame += 1) {
   const phase = (frame / 8) * Math.PI * 2;
   const time = 0.6 + 1.15 * Math.sin(phase);
-  for (const [theme, color] of [
-    ['light', primary],
-    ['dark', '#8991ff'],
+  for (const [theme, background, foreground] of [
+    ['light', ink, paper],
+    ['dark', paper, primary],
   ]) {
     const sourceName = `motion-${theme}-${frame}.svg`;
     const outputName = `motion-${theme}-${frame}.png`;
-    writeFileSync(resolve(previewDir, sourceName), motionFrameSvg(color, time));
+    writeFileSync(
+      resolve(previewDir, sourceName),
+      motionFrameSvg(background, foreground, time),
+    );
     execFileSync('magick', [
       '-background',
       'none',
