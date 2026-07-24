@@ -1,0 +1,12 @@
+# GitHub Pages builds this repository with Jekyll. Keep repository-only tooling out of the
+# published crest88.com artifact; scripts/serve.mjs enforces the same boundary locally.
+exclude:
+  - .github
+  - .gitignore
+  - CLAUDE.md
+  - README.md
+  - node_modules
+  - package-lock.json
+  - package.json
+  - scripts
+  - tests

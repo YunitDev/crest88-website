@@ -1,0 +1,40 @@
+name: Site checks
+
+on:
+  pull_request:
+    branches:
+      - epic/operator-public-site
+      - main
+  push:
+    branches:
+      - epic/operator-public-site
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-site:
+    name: Static site
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked toolchain
+        run: npm ci
+
+      - name: Validate and test
+        run: npm run check
