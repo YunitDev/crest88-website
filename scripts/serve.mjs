@@ -55,6 +55,12 @@ function isWithinRoot(containingRoot, target) {
   );
 }
 
+function isPrivateCanonicalTarget(containingRoot, target) {
+  const relativeTarget = path.relative(containingRoot, target);
+  if (!relativeTarget) return false;
+  return privateRootEntries.has(relativeTarget.split(path.sep, 1)[0]);
+}
+
 async function fileForRequest(requestUrl) {
   let pathname;
   try {
@@ -82,7 +88,12 @@ async function fileForRequest(requestUrl) {
       realpath(root),
       realpath(absolutePath),
     ]);
-    if (!isWithinRoot(resolvedRoot, resolvedTarget)) return null;
+    if (
+      !isWithinRoot(resolvedRoot, resolvedTarget) ||
+      isPrivateCanonicalTarget(resolvedRoot, resolvedTarget)
+    ) {
+      return null;
+    }
 
     // Open the canonical path once, then verify the opened inode still matches that path.
     // The response streams this pinned handle so a later symlink swap cannot change its bytes.
@@ -91,7 +102,10 @@ async function fileForRequest(requestUrl) {
       fileHandle.stat(),
       realpath(resolvedTarget),
     ]);
-    if (!isWithinRoot(resolvedRoot, confirmedTarget)) {
+    if (
+      !isWithinRoot(resolvedRoot, confirmedTarget) ||
+      isPrivateCanonicalTarget(resolvedRoot, confirmedTarget)
+    ) {
       await fileHandle.close();
       return null;
     }

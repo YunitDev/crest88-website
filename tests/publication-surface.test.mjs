@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import {
+  mkdir,
   mkdtemp,
   readFile,
   rm,
+  stat,
   symlink,
   writeFile,
 } from "node:fs/promises";
@@ -72,9 +74,44 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
   const outsideFile = path.join(outsideDirectory, "outside.txt");
   const linkedPath = path.join(root, `server-leak-${process.pid}.txt`);
   const privateAliasPath = path.join(root, "public-alias.json");
+  const nodeModulesPath = path.join(root, "node_modules");
+  const nodeModulesProbe = path.join(
+    nodeModulesPath,
+    `private-probe-${process.pid}.txt`,
+  );
+  let createdNodeModules = false;
+  try {
+    await stat(nodeModulesPath);
+  } catch {
+    await mkdir(nodeModulesPath);
+    createdNodeModules = true;
+  }
   await writeFile(outsideFile, "This file is outside the publishable site root.");
+  await writeFile(nodeModulesProbe, "Repository-only dependency content.");
   await symlink(outsideFile, linkedPath);
   await symlink(path.join(root, "package.json"), privateAliasPath);
+
+  const privateAliasProbes = [
+    { entry: ".git", suffix: "" },
+    { entry: ".github", suffix: "/workflows/site-checks.yml" },
+    { entry: ".gitignore", suffix: "" },
+    { entry: "_config.yml", suffix: "" },
+    { entry: "CLAUDE.md", suffix: "" },
+    { entry: "README.md", suffix: "" },
+    { entry: "node_modules", suffix: `/${path.basename(nodeModulesProbe)}` },
+    { entry: "package-lock.json", suffix: "" },
+    { entry: "scripts", suffix: "/check-site.mjs" },
+    { entry: "tests", suffix: "/site-audit.test.mjs" },
+  ].map((probe, index) => ({
+    ...probe,
+    alias: `private-alias-${index}-${process.pid}`,
+  }));
+  for (const probe of privateAliasProbes) {
+    await symlink(
+      path.join(root, probe.entry),
+      path.join(root, probe.alias),
+    );
+  }
 
   const child = spawn(process.execPath, ["scripts/serve.mjs", "--port", String(port)], {
     cwd: root,
@@ -84,6 +121,15 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
     child.kill("SIGTERM");
     await rm(linkedPath, { force: true });
     await rm(privateAliasPath, { force: true });
+    await Promise.all(
+      privateAliasProbes.map((probe) =>
+        rm(path.join(root, probe.alias), { force: true, recursive: true }),
+      ),
+    );
+    await rm(nodeModulesProbe, { force: true });
+    if (createdNodeModules) {
+      await rm(nodeModulesPath, { force: true, recursive: true });
+    }
     await rm(outsideDirectory, { force: true, recursive: true });
   });
   await waitForServer(child);
@@ -117,4 +163,15 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
     404,
     "a public symlink must not alias a private in-root file",
   );
+  for (const probe of privateAliasProbes) {
+    assert.equal(
+      (
+        await fetch(
+          `http://127.0.0.1:${port}/${probe.alias}${probe.suffix}`,
+        )
+      ).status,
+      404,
+      `a public symlink must not alias private root entry ${probe.entry}`,
+    );
+  }
 });
