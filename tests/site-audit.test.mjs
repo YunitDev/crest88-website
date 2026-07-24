@@ -69,3 +69,82 @@ test("reports missing required metadata", async () => {
     ),
   );
 });
+
+test("validates fragments after a query string", async () => {
+  const validRoot = await makeSite(
+    VALID_PAGE.replace("privacy.html", "privacy.html?source=footer#content"),
+  );
+  assert.deepEqual(await auditSite(validRoot), []);
+
+  const invalidReference = "privacy.html?source=footer#missing-section";
+  const invalidRoot = await makeSite(VALID_PAGE.replace("privacy.html", invalidReference));
+  const findings = await auditSite(invalidRoot);
+
+  assert.ok(
+    findings.some(
+      (finding) =>
+        finding.code === "broken-fragment" && finding.reference === invalidReference,
+    ),
+  );
+});
+
+test("ignores markup-like content inside HTML comments", async () => {
+  const commentedNoise = `<!--
+    <a href="missing-from-comment.html">Not a real link</a>
+    <img src="missing-from-comment.png">
+    <div id="content"></div>
+    <input id="commented-input">
+  -->`;
+  const root = await makeSite(VALID_PAGE.replace("<body>", `<body>${commentedNoise}`));
+
+  assert.deepEqual(await auditSite(root), []);
+});
+
+test("does not accept required metadata from an HTML comment", async () => {
+  const root = await makeSite(
+    VALID_PAGE.replace(
+      '    <meta name="description" content="A useful description.">',
+      '    <!-- <meta name="description" content="Commented descriptions do not count."> -->',
+    ),
+  );
+  const findings = await auditSite(root);
+
+  assert.ok(
+    findings.some(
+      (finding) =>
+        finding.code === "missing-metadata" && finding.reference === "description",
+    ),
+  );
+});
+
+test("parses inline module scripts as ECMAScript modules", async () => {
+  const validModule = `<script type="module">
+    import value from "./module-that-is-resolved-by-the-browser.js";
+    await Promise.resolve(value);
+    export { value };
+  </script>`;
+  const root = await makeSite(VALID_PAGE.replace("</body>", `${validModule}</body>`));
+
+  assert.ok(
+    !(await auditSite(root)).some((finding) => finding.code === "invalid-javascript"),
+  );
+});
+
+test("still reports invalid inline module syntax", async () => {
+  const invalidModule = '<script type="module">export const = 1;</script>';
+  const root = await makeSite(VALID_PAGE.replace("</body>", `${invalidModule}</body>`));
+
+  assert.ok(
+    (await auditSite(root)).some((finding) => finding.code === "invalid-javascript"),
+  );
+});
+
+test("does not parse non-JavaScript data blocks as classic scripts", async () => {
+  const structuredData =
+    '<script type="application/ld+json">{"@context":"https://schema.org"}</script>';
+  const root = await makeSite(VALID_PAGE.replace("</body>", `${structuredData}</body>`));
+
+  assert.ok(
+    !(await auditSite(root)).some((finding) => finding.code === "invalid-javascript"),
+  );
+});
