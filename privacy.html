@@ -6,205 +6,287 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Crest88 privacy policy — how we handle data on crest88.com and the Crest88 platform.">
 <meta name="robots" content="noindex">
+<link rel="canonical" href="https://crest88.com/privacy.html">
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="favicon.svg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-  :root {
-    --bg: #ece6d6;
-    --surface: #f5f0e0;
-    --ink: #0a1220;
-    --ink-soft: #2b3446;
-    --ink-muted: #5b6377;
-    --gold: #8a6a1f;
-    --gold-bright: #a8852a;
-    --border: #cfc5aa;
-    --border-soft: #dcd2b8;
-    --serif: 'DM Serif Display', 'Times New Roman', serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  .legal-page {
+    min-width: 320px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: var(--sans); background: var(--bg); color: var(--ink);
-    font-size: 17px; line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
+  .legal-main {
+    min-height: 70vh;
   }
-  a { color: inherit; }
-  em { font-style: italic; color: var(--gold); }
-  .container { max-width: 740px; margin: 0 auto; padding: 0 40px; }
-
-  /* Nav */
-  nav.top {
-    padding: 20px 0; border-bottom: 1px solid var(--border);
-    background: rgba(236,230,214,0.88);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  .legal-hero {
+    position: relative;
+    overflow: clip;
+    padding: 92px 0 78px;
+    border-bottom: 1px solid var(--border);
   }
-  nav.top .inner {
-    max-width: 1280px; margin: 0 auto; padding: 0 40px;
-    display: flex; align-items: center; justify-content: space-between;
+  .legal-hero::after {
+    position: absolute;
+    z-index: -1;
+    top: -17rem;
+    right: -8rem;
+    width: 38rem;
+    height: 38rem;
+    border: 1px solid var(--primary-line);
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--primary-soft), transparent 68%);
+    content: "";
   }
-  .brand { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; }
-  .brand svg { width: 34px; height: 34px; color: var(--gold); }
-  .brand .name { font-family: var(--serif); font-size: 30px; line-height: 1; }
-  .brand .name em { color: var(--gold); }
-  .nav-cta {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 12px 22px; background: var(--ink); color: var(--bg);
-    border-radius: 999px; font-size: 16px; font-weight: 500; text-decoration: none;
-    transition: background .18s ease, transform .12s ease;
+  .legal-label {
+    display: block;
+    margin-bottom: 18px;
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
-  .nav-cta:hover { background: var(--gold); transform: translateY(-1px); }
-
-  /* Legal page */
-  .legal { padding: 80px 0 96px; }
-  .legal .label {
-    display: inline-block;
-    font-size: 13px; font-weight: 500;
-    letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-muted);
-    margin-bottom: 16px;
+  .legal-hero h1 {
+    max-width: 860px;
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 7vw, 6.4rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.94;
   }
-  .legal h1 {
-    font-family: var(--serif); font-size: clamp(40px, 5.2vw, 56px);
-    line-height: 1.1; letter-spacing: -0.015em; color: var(--ink);
-    margin-bottom: 12px;
+  .legal-updated {
+    margin: 28px 0 0;
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-style: normal;
+    letter-spacing: 0.03em;
   }
-  .legal .updated {
-    font-size: 14px; color: var(--ink-muted); font-style: italic;
-    margin-bottom: 56px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--border-soft);
+  .legal-layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 780px);
+    gap: clamp(48px, 7vw, 104px);
+    justify-content: center;
+    padding-block: 76px 112px;
   }
-  .legal-content { color: var(--ink-soft); }
-  .legal-content p { margin-bottom: 20px; }
-  .legal-content p:first-of-type { font-size: 18px; color: var(--ink); }
+  .legal-toc {
+    position: sticky;
+    top: 106px;
+    align-self: start;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: hsl(0 0% 100% / 0.72);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(14px);
+  }
+  .legal-toc summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    list-style: none;
+    text-transform: uppercase;
+  }
+  .legal-toc summary::-webkit-details-marker {
+    display: none;
+  }
+  .legal-toc summary::after {
+    width: 8px;
+    height: 8px;
+    flex: none;
+    border-right: 2px solid var(--primary);
+    border-bottom: 2px solid var(--primary);
+    content: "";
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 160ms ease;
+  }
+  .legal-toc[open] summary::after {
+    transform: translateY(2px) rotate(225deg);
+  }
+  .legal-toc ol {
+    display: grid;
+    gap: 9px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .legal-toc a {
+    display: block;
+    color: var(--text-2);
+    font-size: 0.76rem;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+  .legal-toc a:hover {
+    color: var(--primary);
+  }
+  .legal-content {
+    min-width: 0;
+    color: var(--text-2);
+    font-size: 1rem;
+    line-height: 1.78;
+  }
+  .legal-content p {
+    margin: 0 0 22px;
+  }
+  .legal-content p:first-of-type {
+    color: var(--text);
+    font-size: 1.1rem;
+  }
   .legal-content h2 {
-    font-family: var(--serif); font-size: 26px;
-    color: var(--ink); margin-top: 48px; margin-bottom: 16px;
-    letter-spacing: -0.01em;
+    scroll-margin-top: 110px;
+    margin: 64px 0 18px;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.18;
+  }
+  .legal-content h2:first-of-type {
+    margin-top: 42px;
   }
   .legal-content h3 {
-    font-size: 16px; font-weight: 600; color: var(--ink);
-    margin-top: 30px; margin-bottom: 10px;
+    margin: 34px 0 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 800;
   }
-  .legal-content ul, .legal-content ol {
-    margin: 0 0 20px 24px;
+  .legal-content ul,
+  .legal-content ol {
+    margin: 0 0 24px;
+    padding-left: 1.3rem;
   }
-  .legal-content ul li, .legal-content ol li { margin-bottom: 8px; }
+  .legal-content li {
+    margin-bottom: 10px;
+    padding-left: 0.3rem;
+  }
   .legal-content a {
-    color: var(--gold-bright);
-    text-decoration: underline; text-underline-offset: 3px;
+    color: var(--primary-hover);
+    text-decoration-color: var(--primary-line);
     text-decoration-thickness: 1px;
-    transition: color .2s ease;
+    text-underline-offset: 4px;
   }
-  .legal-content a:hover { color: var(--ink); }
-  .legal-content strong { color: var(--ink); }
+  .legal-content strong {
+    color: var(--text);
+  }
   .summary {
-    background: var(--surface); border: 1px solid var(--border-soft);
-    border-radius: 12px; padding: 26px 30px; margin: 0 0 8px;
+    margin: 0 0 28px;
+    padding: 26px 28px;
+    border: 1px solid var(--primary-line);
+    border-radius: var(--radius-lg);
+    background: var(--primary-soft);
   }
-  .summary ul { margin-bottom: 0; }
-  .table-wrap { overflow-x: auto; margin: 0 0 24px; }
+  .summary ul {
+    margin-bottom: 0;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 0 0 28px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
   .legal-content table {
-    width: 100%; border-collapse: collapse;
-    font-size: 15px; line-height: 1.55;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    line-height: 1.55;
   }
-  .legal-content th {
-    text-align: left; font-weight: 600; color: var(--ink);
-    padding: 10px 14px 10px 0; border-bottom: 2px solid var(--border);
-    white-space: nowrap;
-  }
+  .legal-content th,
   .legal-content td {
-    padding: 12px 14px 12px 0; border-bottom: 1px solid var(--border-soft);
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
     vertical-align: top;
   }
-
-  /* Footer (mirrors index.html) */
-  footer {
-    padding: 56px 0 32px; border-top: 1px solid var(--border);
-    color: var(--ink-muted); font-size: 15px;
+  .legal-content th {
+    color: var(--text);
+    text-align: left;
   }
-  footer .inner {
-    max-width: 1280px; margin: 0 auto; padding: 0 40px;
-    display: flex; align-items: flex-start; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap;
+  .legal-content tr:last-child td {
+    border-bottom: 0;
   }
-  .footer-brand { display: flex; flex-direction: column; gap: 10px; }
-  .footer-brand .brand .name { font-size: 22px; }
-  .footer-brand .brand svg { width: 22px; height: 22px; }
-  .footer-tagline { font-size: 14px; color: var(--ink-muted); margin: 0; }
-  .footer-contact a {
-    color: var(--ink-soft); text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color .2s ease, color .2s ease;
-  }
-  .footer-contact a:hover { color: var(--gold-bright); border-color: var(--gold-bright); }
-  .footer-meta {
-    max-width: 1280px; margin: 32px auto 0; padding: 24px 40px 0;
-    border-top: 1px solid var(--border-soft);
-    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-    font-size: 13px; color: var(--ink-muted);
-  }
-  .footer-meta a { color: var(--ink-muted); text-decoration: none; transition: color .2s ease; }
-  .footer-meta a:hover { color: var(--ink); }
-  .footer-meta .sep { opacity: 0.4; user-select: none; }
-
-  @media (max-width: 640px) {
-    .container { padding: 0 24px; }
-    nav.top .inner { padding: 0 24px; }
-    .legal { padding: 56px 0 64px; }
-    .legal h1 { font-size: 36px; }
-    .summary { padding: 20px 22px; }
-    footer .inner { padding: 0 24px; }
-    .footer-meta { padding: 24px 24px 0; }
+  @media (max-width: 820px) {
+    .legal-hero {
+      padding: 70px 0 58px;
+    }
+    .legal-layout {
+      grid-template-columns: 1fr;
+      gap: 34px;
+      padding-block: 42px 82px;
+    }
+    .legal-toc {
+      position: static;
+      padding: 17px 18px;
+    }
+    .legal-toc[open] ol {
+      max-height: 17rem;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .legal-content h2 {
+      margin-top: 50px;
+    }
   }
 </style>
+<script defer src="assets/orb.js"></script>
+<script defer src="assets/site.js"></script>
 </head>
-<body>
+<body class="legal-page">
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <symbol id="crest-star" viewBox="0 0 40 40">
-      <g stroke="currentColor" stroke-width="0.8" opacity="0.55" stroke-linecap="round">
-        <line x1="10" y1="10" x2="30" y2="30"></line>
-        <line x1="30" y1="10" x2="10" y2="30"></line>
-      </g>
-      <path d="M20 2 L21.6 18.4 L38 20 L21.6 21.6 L20 38 L18.4 21.6 L2 20 L18.4 18.4 Z" fill="currentColor"></path>
-      <circle cx="20" cy="20" r="0.9" fill="#ece6d6"></circle>
-    </symbol>
-  </defs>
-</svg>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="site-shell">
+  <header class="site-nav">
+    <nav class="nav-inner rail" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="Crest88 home">
+        <span class="brand-orb" aria-hidden="true">
+          <canvas data-orb data-size="30" data-speed="0.82" tabindex="-1"></canvas>
+        </span>
+        <span>Crest88</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-hide-mobile" href="index.html">Home</a>
+        <a href="https://brain.crest88.com/login">Sign in</a>
+        <a class="button" href="index.html#contact">Talk to us</a>
+      </div>
+    </nav>
+  </header>
 
-<nav class="top">
-  <div class="inner">
-    <a href="index.html" class="brand">
-      <svg aria-hidden="true"><use href="#crest-star"></use></svg>
-      <span class="name">Crest<em>88</em></span>
-    </a>
-    <a href="index.html#contact" class="nav-cta">
-      <span>Get in touch</span><span>&rarr;</span>
-    </a>
-  </div>
-</nav>
+  <main class="legal-main" id="main">
+    <header class="legal-hero">
+      <div class="rail">
+        <span class="legal-label">Legal · Crest88</span>
+        <h1>Privacy Policy</h1>
+        <p class="legal-updated">Last updated: July 22, 2026 &middot; Effective: July 22, 2026</p>
+      </div>
+    </header>
 
-<main class="legal">
-  <div class="container">
-    <span class="label">Legal</span>
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: July 22, 2026 &middot; Effective: July 22, 2026</p>
-
-    <div class="legal-content">
+    <div class="legal-layout rail">
+      <details class="legal-toc" open>
+        <summary>On this page</summary>
+        <ol data-legal-toc></ol>
+      </details>
+      <article class="legal-content">
       <p>This Privacy Policy explains how <strong>Crest88 LLC</strong> ("Crest88," "we," "us") collects, uses, and protects information across our website — crest88.com — and the Crest88 platform: our AI agent platform, sometimes called "Central Brain," available to clients at brain.crest88.com and related subdomains (the "Platform").</p>
 
       <p>The Platform is a business product. We provide it to companies ("Clients") under a signed engagement letter or services agreement, and the people who use it ("Users") do so on behalf of a Client. Where this Policy and a Client's signed agreement differ, the signed agreement controls for that Client's data.</p>
 
       <p>If you have any questions, contact us at <a href="mailto:hello@crest88.com">hello@crest88.com</a>.</p>
 
-      <h2>1. The short version</h2>
+      <h2 id="section-1">1. The short version</h2>
       <div class="summary">
         <ul>
           <li>We collect the minimum account information needed to sign you in: your <strong>email address</strong>, your role, and login timestamps. Names, photos, and passwords are handled by our identity provider, not stored in our application database.</li>
@@ -215,7 +297,7 @@
         </ul>
       </div>
 
-      <h2>2. Information we collect</h2>
+      <h2 id="section-2">2. Information we collect</h2>
 
       <h3>On the website (crest88.com)</h3>
       <p>If you submit our contact form, we collect what you enter: your name, email address, and any optional details (company, website, revenue range, message). The website itself sets no analytics or advertising cookies.</p>
@@ -262,7 +344,7 @@
         <li><strong>Voice telemetry</strong> — for voice features we log technical events (connection status, latency, errors). <strong>We do not store raw audio recordings</strong>, and voice telemetry excludes message content and personal details. What you say through voice features is stored only as written transcript, in your workspace, where the feature is designed to keep one (for example meeting transcripts)</li>
       </ul>
 
-      <h2>3. How we use information</h2>
+      <h2 id="section-3">3. How we use information</h2>
       <p>We use information to:</p>
       <ul>
         <li>Provide, operate, and secure the Platform for your organization</li>
@@ -274,7 +356,7 @@
       </ul>
       <p><strong>We do not sell personal information, and we do not use your information for third-party advertising.</strong> We do not use your organization's content to build products for other customers.</p>
 
-      <h2>4. AI processing — what leaves our systems</h2>
+      <h2 id="section-4">4. AI processing — what leaves our systems</h2>
       <p>To provide AI features, relevant content is sent to our AI providers for processing:</p>
       <ul>
         <li><strong>OpenAI</strong> — text generation, embeddings (the math that powers search), web search within the assistant, and real-time voice (your speech is streamed to OpenAI to be understood and transcribed)</li>
@@ -283,7 +365,7 @@
       <p>Depending on the feature in use, the content processed can include chat messages, email text, document excerpts, meeting speech, and the on-screen values needed for voice control to work. We use these providers through their business APIs under terms that <strong>do not permit them to use your data to train their models</strong>.</p>
       <p>If your organization uses the meeting-notes feature, a notetaker bot from <strong>Recall.ai</strong> joins the meeting you invite it to and delivers the transcript to your workspace. Meeting audio is processed by Recall.ai for that purpose.</p>
 
-      <h2>5. Who we share information with</h2>
+      <h2 id="section-5">5. Who we share information with</h2>
       <p>We share information only with the service providers that make the Platform run ("subprocessors"), with connected services you have authorized, and where the law requires it. We never sell it. Current subprocessors:</p>
       <div class="table-wrap">
         <table>
@@ -299,7 +381,7 @@
       </div>
       <p>We will update this list as our providers change. We may also disclose information if required by law, or in connection with a corporate transaction such as a merger — in which case this Policy continues to apply to the transferred data.</p>
 
-      <h2>6. Who at Crest88 can see your data</h2>
+      <h2 id="section-6">6. Who at Crest88 can see your data</h2>
       <p>Crest88 operators (our team) can access a Client workspace to provide the service — for setup, support, and operating agents on your behalf, as agreed in your engagement. This access is deliberately constrained:</p>
       <ul>
         <li>Operator access runs in <strong>time-boxed sessions</strong> (30 minutes) that are individually recorded</li>
@@ -309,14 +391,14 @@
       </ul>
       <p>Server access is equally restricted: there is no open SSH port; administrative access goes through AWS's identity-controlled session manager and is logged in AWS CloudTrail.</p>
 
-      <h2>7. Data ownership</h2>
+      <h2 id="section-7">7. Data ownership</h2>
       <p>Consistent with our client agreements:</p>
       <ul>
         <li><strong>Your organization owns its data</strong> — the raw business content it brings, and the configured knowledge built from it (facts, records, transcripts, indexes, workflows configured for your business). This is exportable by your organization.</li>
         <li><strong>Crest88 owns the engine</strong> — the software, prompts, agent architectures, evaluation systems, and operational telemetry that make the Platform work. Engine internals are never included in exports.</li>
       </ul>
 
-      <h2>8. Security</h2>
+      <h2 id="section-8">8. Security</h2>
       <ul>
         <li><strong>Encryption in transit</strong> — all traffic to the Platform uses TLS (HTTPS)</li>
         <li><strong>Encryption of secrets at rest</strong> — connection credentials and sensitive secrets are envelope-encrypted with AES-256-GCM using per-tenant keys; OAuth tokens live in AWS Secrets Manager, not the application database</li>
@@ -326,7 +408,7 @@
       </ul>
       <p>No system is perfectly secure, and we cannot guarantee absolute security — but security is designed into the Platform's architecture, not bolted on.</p>
 
-      <h2>9. How long we keep information</h2>
+      <h2 id="section-9">9. How long we keep information</h2>
       <div class="table-wrap">
         <table>
           <tr><th style="white-space:normal">Data</th><th style="white-space:normal">Retention</th></tr>
@@ -348,7 +430,7 @@
       </ol>
       <p>We retain only what security and law sensibly require after offboarding: audit logs (on their normal schedule), usage records (billing/tax), and the deletion receipt itself.</p>
 
-      <h2>10. Your rights and choices</h2>
+      <h2 id="section-10">10. Your rights and choices</h2>
       <ul>
         <li><strong>Access and export</strong> — your organization's authorized users can export its data at any time from within the Platform</li>
         <li><strong>Disconnect</strong> — any connected service can be disconnected by an authorized user</li>
@@ -358,42 +440,54 @@
       <p>Depending on where you live, you may have additional legal rights over your personal information (such as rights of access, correction, deletion, or portability). To exercise any right, email <a href="mailto:hello@crest88.com">hello@crest88.com</a> — we will respond to verifiable requests as required by applicable law, and we do not discriminate against you for exercising them.</p>
       <p>The Platform is a business tool and is not directed to children under 16; we do not knowingly collect information from them.</p>
 
-      <h2>11. Where data is processed</h2>
+      <h2 id="section-11">11. Where data is processed</h2>
       <p>We are a U.S. company and process data in the United States. If you access the Platform from outside the U.S., you understand your information will be transferred to and processed in the U.S.</p>
 
-      <h2>12. Changes to this Policy</h2>
+      <h2 id="section-12">12. Changes to this Policy</h2>
       <p>If we make material changes, we will update the date above and notify Platform users through the product or by email. Continued use after changes take effect means the updated Policy applies.</p>
 
-      <h2>13. Contact</h2>
+      <h2 id="section-13">13. Contact</h2>
       <p><strong>Crest88 LLC</strong> &middot; <a href="mailto:hello@crest88.com">hello@crest88.com</a></p>
       <p>If you have a concern we haven't resolved, you can also contact your local data-protection authority where applicable.</p>
+      </article>
     </div>
-  </div>
-</main>
+  </main>
 
-<footer>
-  <div class="inner">
-    <div class="footer-brand">
-      <a href="index.html" class="brand">
-        <svg aria-hidden="true"><use href="#crest-star"></use></svg>
-        <span class="name">Crest<em>88</em></span>
+  <footer class="site-footer">
+    <div class="footer-inner rail">
+      <a class="brand" href="index.html" aria-label="Crest88 home">
+        <span class="brand-orb" aria-hidden="true"><canvas data-orb data-size="26" data-speed="0.82" tabindex="-1"></canvas></span>
+        <span>Crest88</span>
       </a>
-      <p class="footer-tagline">Senior operators. AI-powered tools.</p>
+      <p>AI agents for the work that runs your business.</p>
+      <div class="footer-links">
+        <a aria-current="page" href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="mailto:hello@crest88.com">hello@crest88.com</a>
+      </div>
     </div>
-    <div class="footer-contact">
-      <a href="mailto:hello@crest88.com">hello@crest88.com</a>
-    </div>
-  </div>
-  <div class="footer-meta">
-    <span>&copy; 2026 Crest88 LLC</span>
-    <span class="sep">·</span>
-    <a href="privacy.html">Privacy</a>
-    <span class="sep">·</span>
-    <a href="terms.html">Terms</a>
-    <span class="sep">·</span>
-    <a href="https://crest88.com">crest88.com</a>
-  </div>
-</footer>
-
+  </footer>
+</div>
+<script>
+  (() => {
+    const headings = [...document.querySelectorAll(".legal-content h2")];
+    const list = document.querySelector("[data-legal-toc]");
+    headings.forEach((heading) => {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `#${heading.id}`;
+      link.textContent = heading.textContent;
+      item.append(link);
+      list.append(item);
+    });
+    if (window.matchMedia("(max-width: 820px)").matches) {
+      document.querySelector(".legal-toc").removeAttribute("open");
+    }
+    const linkedSection = document.getElementById(window.location.hash.slice(1));
+    if (linkedSection) {
+      requestAnimationFrame(() => linkedSection.scrollIntoView({ behavior: "instant" }));
+    }
+  })();
+</script>
 </body>
 </html>
