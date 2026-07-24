@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { access, readdir, readFile, stat } from "node:fs/promises";
+import { access, readdir, readFile, realpath, stat } from "node:fs/promises";
 import path from "node:path";
 import vm from "node:vm";
 
@@ -262,6 +262,16 @@ async function exists(target) {
   }
 }
 
+function isWithinRoot(root, target) {
+  const relativeTarget = path.relative(root, target);
+  return (
+    relativeTarget === "" ||
+    (relativeTarget !== ".." &&
+      !relativeTarget.startsWith(`..${path.sep}`) &&
+      !path.isAbsolute(relativeTarget))
+  );
+}
+
 async function resolveSiteTarget(root, sourceFile, reference) {
   const sourcePath = path.relative(root, sourceFile).split(path.sep).join("/");
   const baseUrl = new URL(sourcePath, "https://crest88.test/");
@@ -285,7 +295,9 @@ async function resolveSiteTarget(root, sourceFile, reference) {
     return { exists: false };
   }
 
-  let target = path.join(root, pathReference.replace(/^\/+/, ""));
+  let target = path.resolve(root, pathReference.replace(/^\/+/, ""));
+  if (!isWithinRoot(root, target)) return { exists: false };
+
   if (await exists(target)) {
     const targetStats = await stat(target);
     if (targetStats.isDirectory()) target = path.join(target, "index.html");
@@ -294,6 +306,15 @@ async function resolveSiteTarget(root, sourceFile, reference) {
   }
 
   if (!(await exists(target))) return { exists: false };
+  let resolvedRoot;
+  let resolvedTarget;
+  try {
+    [resolvedRoot, resolvedTarget] = await Promise.all([realpath(root), realpath(target)]);
+  } catch {
+    return { exists: false };
+  }
+  if (!isWithinRoot(resolvedRoot, resolvedTarget)) return { exists: false };
+
   if (!fragment || path.extname(target).toLowerCase() !== ".html") return { exists: true };
 
   const targetHtml = markupWithoutInlineCode(await readFile(target, "utf8"));

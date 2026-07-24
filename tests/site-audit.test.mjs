@@ -134,6 +134,21 @@ test("rejects symlinks that resolve outside the site root", async () => {
   );
 });
 
+test("accepts symlinks that remain inside the site root", async () => {
+  const root = await makeSite();
+  await writeFile(path.join(root, "real-asset.txt"), "A public in-root asset.");
+  await symlink(
+    path.join(root, "real-asset.txt"),
+    path.join(root, "linked-asset.txt"),
+  );
+  await writeFile(
+    path.join(root, "index.html"),
+    VALID_PAGE.replace("privacy.html", "linked-asset.txt"),
+  );
+
+  assert.deepEqual(await auditSite(root), []);
+});
+
 test("ignores markup-like content inside HTML comments", async () => {
   const commentedNoise = `<!--
     <a href="missing-from-comment.html">Not a real link</a>
