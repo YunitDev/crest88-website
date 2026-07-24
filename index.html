@@ -86,7 +86,15 @@
                   <h2>Your agents at work</h2>
                 </div>
               </div>
-              <span class="live-chip">Live now</span>
+              <div class="desk-status">
+                <span class="live-chip">Live now</span>
+                <button class="motion-toggle motion-toggle-dark" type="button" data-agent-toggle aria-pressed="false">
+                  <svg data-motion-icon viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+                    <path d="M7 5h3v14H7zM14 5h3v14h-3z"/>
+                  </svg>
+                  <span data-motion-label>Pause</span>
+                </button>
+              </div>
             </header>
 
             <div class="desk-body">
@@ -258,7 +266,15 @@
             <button class="carousel-button" type="button" data-outcome-previous aria-label="Show previous customer outcome">
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M10 6l-6 6 6 6"/></svg>
             </button>
-            <span class="outcome-count" data-outcome-count aria-live="polite">01–03 of 10</span>
+            <div class="outcome-status">
+              <span class="outcome-count" data-outcome-count aria-live="polite">01–03 of 10</span>
+              <button class="motion-toggle" type="button" data-outcome-toggle aria-pressed="false">
+                <svg data-motion-icon viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+                  <path d="M7 5h3v14H7zM14 5h3v14h-3z"/>
+                </svg>
+                <span data-motion-label>Pause</span>
+              </button>
+            </div>
             <button class="carousel-button" type="button" data-outcome-next aria-label="Show next customer outcome">
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M14 6l6 6-6 6"/></svg>
             </button>
