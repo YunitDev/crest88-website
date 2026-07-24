@@ -136,6 +136,26 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
 
   assert.equal((await fetch(`http://127.0.0.1:${port}/`)).status, 200);
   for (const pathname of [
+    "/favicon.svg",
+    "/favicon.ico",
+    "/apple-touch-icon.png",
+    "/crest88-mark.png",
+    "/og.png",
+    "/assets/favicon-motion.js",
+    ...["light", "dark"].flatMap((theme) =>
+      Array.from(
+        { length: 8 },
+        (_, frame) => `/assets/favicon/motion-${theme}-${frame}.png`,
+      ),
+    ),
+  ]) {
+    assert.equal(
+      (await fetch(`http://127.0.0.1:${port}${pathname}`)).status,
+      200,
+      `${pathname} should be publicly available`,
+    );
+  }
+  for (const pathname of [
     "/.github/workflows/site-checks.yml",
     "/.gitignore",
     "/_config.yml",
@@ -173,5 +193,95 @@ test("local preview exposes the same safe surface as GitHub Pages", async (conte
       404,
       `a public symlink must not alias private root entry ${probe.entry}`,
     );
+  }
+});
+
+test("identity assets keep their approved formats and dimensions", async () => {
+  function pngDimensions(buffer) {
+    assert.equal(
+      buffer.subarray(0, 8).toString("hex"),
+      "89504e470d0a1a0a",
+      "asset must use the PNG signature",
+    );
+    return {
+      width: buffer.readUInt32BE(16),
+      height: buffer.readUInt32BE(20),
+    };
+  }
+
+  assert.deepEqual(
+    pngDimensions(await readFile(path.join(root, "apple-touch-icon.png"))),
+    { width: 180, height: 180 },
+  );
+  assert.deepEqual(
+    pngDimensions(await readFile(path.join(root, "crest88-mark.png"))),
+    { width: 88, height: 88 },
+  );
+  assert.deepEqual(
+    pngDimensions(await readFile(path.join(root, "og.png"))),
+    { width: 1200, height: 630 },
+  );
+  for (const theme of ["light", "dark"]) {
+    for (let frame = 0; frame < 8; frame += 1) {
+      const faviconFrame = await readFile(
+        path.join(root, "assets", "favicon", `motion-${theme}-${frame}.png`),
+      );
+      assert.deepEqual(pngDimensions(faviconFrame), { width: 32, height: 32 });
+      assert.equal(
+        faviconFrame[25],
+        6,
+        `${theme} frame ${frame} must retain an RGBA color type`,
+      );
+    }
+  }
+
+  const favicon = await readFile(path.join(root, "favicon.ico"));
+  assert.equal(favicon.readUInt16LE(0), 0, "ICO reserved field must be zero");
+  assert.equal(favicon.readUInt16LE(2), 1, "ICO must identify as an icon");
+  assert.equal(favicon.readUInt16LE(4), 3, "ICO must contain three sizes");
+  const faviconSizes = Array.from({ length: 3 }, (_, index) => {
+    const width = favicon[6 + index * 16];
+    return width === 0 ? 256 : width;
+  });
+  assert.deepEqual(faviconSizes, [16, 32, 48]);
+  for (let index = 0; index < 3; index += 1) {
+    const directoryOffset = 6 + index * 16;
+    const imageOffset = favicon.readUInt32LE(directoryOffset + 12);
+    const imageSize = favicon.readUInt32LE(directoryOffset + 8);
+    const frame = favicon.subarray(imageOffset, imageOffset + imageSize);
+    assert.equal(frame.readUInt32LE(0), 40, `ICO frame ${index + 1} must use a DIB header`);
+    const frameWidth = frame.readInt32LE(4);
+    const frameHeight = frame.readInt32LE(8) / 2;
+    assert.equal(frame.readUInt16LE(14), 32, `ICO frame ${index + 1} must use 32-bit color`);
+    const alphaValues = Array.from(
+      { length: frameWidth * frameHeight },
+      (_, pixelIndex) => frame[40 + pixelIndex * 4 + 3],
+    );
+    assert.equal(
+      Math.min(...alphaValues),
+      0,
+      `ICO frame ${index + 1} must contain transparent pixels`,
+    );
+    assert.ok(
+      Math.max(...alphaValues) > 0,
+      `ICO frame ${index + 1} must retain visible orb pixels`,
+    );
+  }
+
+  const faviconSvg = await readFile(path.join(root, "favicon.svg"), "utf8");
+  assert.match(faviconSvg, /viewBox="0 0 32 32"/);
+  assert.match(faviconSvg, /prefers-color-scheme:\s*dark/);
+  assert.match(faviconSvg, /<circle class="favicon-field"[^>]+r="15"/);
+  assert.match(faviconSvg, /\.favicon-field\s*\{\s*fill:\s*#101827/);
+  assert.match(faviconSvg, /\.favicon-field\s*\{\s*fill:\s*#f8f9ff/);
+  assert.doesNotMatch(faviconSvg, /<rect\b/, "favicon should remain transparent");
+});
+
+test("every public page loads the approved favicon motion controller", async () => {
+  for (const page of ["index.html", "privacy.html", "terms.html"]) {
+    const html = await readFile(path.join(root, page), "utf8");
+    assert.match(html, /href="favicon\.ico\?v=3"/);
+    assert.match(html, /href="favicon\.svg\?v=3"/);
+    assert.match(html, /src="assets\/favicon-motion\.js\?v=3"/);
   }
 });
